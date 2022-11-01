@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class LoginController extends Controller
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Menu;
+class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,11 @@ class LoginController extends Controller
      */
     public function index()
     {
-        //
+
+        $index = Menu::get();
+        return response()->json($index);
+
+        
     }
 
     /**
@@ -25,7 +30,12 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        
+
+        $data = Menu::create([
+            'name'=> $request -> name, 
+            'user_id'=> Auth::user()-> id,
+        ]);
+        return response()->json($data);
     }
 
     /**
@@ -36,7 +46,7 @@ class LoginController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
