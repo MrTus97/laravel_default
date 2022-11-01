@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\menuApiController;
 use App\Http\Controllers\Api\newApiController;
+use App\Http\Controllers\Api\userApiController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,25 +19,34 @@ use App\Http\Controllers\Api\newApiController;
 */
 
 
-Route::middleware('auth:sanctum')->group(function(){
-    return response('hfidfhdfhdif');
+// Route::middleware('auth:sanctum')->group(function(){
+//     return $request->user();
+// });
+
+
+Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::prefix('laravel')->group(function(){
+        Route::prefix('menus')->group(function(){
+            Route::get('index', [menuApiController::class , 'index']);
+            Route::post('add', [menuApiController::class , 'store']);
+            Route::get('show/{id}',[menuApiController::class, 'show']);
+            Route::put('update/{id}', [menuApiController::class, 'update']);
+            Route::delete('delete/{id}', [menuApiController::class, 'destroy']);
+        });
+        Route::prefix('news')->group(function(){
+            Route::get('index', [newApiController::class, 'index']);
+            Route::post('add', [newApiController::class , 'store']);
+            Route::get('show/{id}',[newApiController::class, 'show']);
+            Route::put('update/{id}', [newApiController::class, 'update']);
+            Route::delete('delete/{id}', [newApiController::class, 'destroy']);
+        });
+    });
+});
+Route::prefix('users')->group(function(){
+    Route::post('register', [userApiController::class, 'register']);
+    Route::get('login', [userApiController::class, 'login']);
+
 });
 
 
-Route::prefix('laravel')->group(function(){
-    Route::prefix('menus')->group(function(){
-        Route::get('index', [menuApiController::class , 'index']);
-        Route::post('add', [menuApiController::class , 'store']);
-        Route::get('show/{id}',[menuApiController::class, 'show']);
-        Route::put('update/{id}', [menuApiController::class, 'update']);
-        Route::delete('delete/{id}', [menuApiController::class, 'destroy']);
-    });
-    Route::prefix('news')->group(function(){
-        Route::get('index', [newApiController::class, 'index']);
-        Route::post('add', [newApiController::class , 'store']);
-        Route::get('show/{id}',[newApiController::class, 'show']);
-        Route::put('update/{id}', [newApiController::class, 'update']);
-        Route::delete('delete/{id}', [newApiController::class, 'destroy']);
-    });
-});
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\News;
 use App\Http\Requests\NewRequest;
+use Illuminate\Support\Facades\Auth;
 
 class newApiController extends Controller
 {
@@ -40,7 +41,7 @@ class newApiController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'menu_id' => $request->menu_id,
-            'user_id' => 1
+            'user_id' => Auth::user()->id
         ]);
 
         return response([
@@ -78,7 +79,7 @@ class newApiController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'menu_id' => $request->menu_id,
-            'user_id' => 1
+            'user_id' => Auth::user()->id
         ]);
         return response('Updata thành công');
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Http\Requests\MenuRequest;
+use Illuminate\Support\Facades\Auth;
 
 class menuApiController extends Controller
 {
@@ -38,7 +39,7 @@ class menuApiController extends Controller
 
         $storeData = $this->menu->create([
             'name' => $request->name,
-            'user_id' => 1
+            'user_id' => Auth::user()->id
         ]);
 
         return response([
@@ -74,7 +75,7 @@ class menuApiController extends Controller
         $dataUpate = $this->menu->find($id);
         $dataUpate->update([
             'name' => $request->name,
-            'user_id' => 1
+            'user_id' => Auth::user()->id
         ]);
         return response('Updata thành công');
     }
