@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class News extends Model
 {
     use HasFactory;
+    protected $table = 'news';
+    protected $fillable =[
+        'title',
+        'content',
+        'menu_id',
+        'user_id'
+    ];
 }
