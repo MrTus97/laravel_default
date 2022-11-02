@@ -43,13 +43,15 @@ class newApiController extends Controller
     public function store(NewRequest $request)
     {
 
+
+
+
         $check =$this->menu->where('id', $request->menu_id)->exists();
            if($check){
                 $uploadFolder = 'news';
                 $image = $request->file('image_path');
-                $nameImage = $image->getClientOriginalName();
-                $image_path = $nameImage->store($uploadFolder, 'public');
-
+                $image_path = $image->store($uploadFolder, 'public');
+                $nameImage = basename($image_path);
                 $storeData = $this->new->create([
                     'title' => $request->title,
                     'content' => $request->content,
