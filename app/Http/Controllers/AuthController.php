@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Validator;
+use Illuminate\Support\Facades\Validator;  
 use Illuminate\Support\Facades\Hash;
 
 
@@ -17,7 +17,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    // khoi tạo các thuộc    tính sử dụng middleware auth:api. AuthController sẽ không thể được truy cập mà không có một token hợp lệ. truừ login và 
+    // khoi tạo các thuộc tính
 
     public function __construct() {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);

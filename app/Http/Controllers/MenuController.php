@@ -36,7 +36,7 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-
+       
         $data = Menu::create([
             'name'=> $request -> name, 
             'user_id'=> Auth::user()-> id,
@@ -73,7 +73,7 @@ class MenuController extends Controller
         $menuUpdate = $this -> menu->find($id);
         $menuUpdate ->update ([
             'name'=>$request->name,
-            // 'user_id' => Auth::user()->id 
+            'user_id' => Auth::user()->id 
             
         ]);
        

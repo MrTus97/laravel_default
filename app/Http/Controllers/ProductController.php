@@ -39,7 +39,7 @@ class ProductController extends Controller
         $data = Product::create([
             'name'=> $request -> name, 
             'content'=> $request -> content, 
-            'user_id'=> 13,
+            'user_id'=> Auth::user()-> id,
             'menu_id'=> $request ->menu_id,
 
         ]);
@@ -73,15 +73,14 @@ class ProductController extends Controller
         $productUpdate = $this -> product->find($id);
         $productUpdate ->update ([
             'name'=>$request->name,
-            'user_id'=> 13,
-            'menu_id'=> $request ->menu_id,
-            // 'user_id' => Auth::user()->id 
-            
-        ]);
-       
+            'content'=>$request->content,
+            'menu_id'=> $request->menu_id,
+            'user_id' => Auth::user()->id             
+        ]);   
         return response([
             'data' => $productUpdate,
         ]);
+
 
     }
 
