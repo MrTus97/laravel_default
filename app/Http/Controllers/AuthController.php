@@ -17,7 +17,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    //sử dụng middleware auth:api. AuthController sẽ không thể được truy cập mà không có một token hợp lệ. truừ login và 
+    // khoi tạo các thuộc    tính sử dụng middleware auth:api. AuthController sẽ không thể được truy cập mà không có một token hợp lệ. truừ login và 
 
     public function __construct() {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
@@ -43,6 +43,11 @@ class AuthController extends Controller
         }
 
         return $this->createNewToken($token);
+        
+    }
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

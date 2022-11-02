@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DB;
-class Menu extends Model
+
+class Product extends Model
 {
     use HasFactory;
+    protected $table ='products';
 
-    protected $table ='menus';
-
-    protected $fillable =['name', 'user_id'];
+    protected $fillable =['name','content', 'user_id','menu_id'];
 
 }

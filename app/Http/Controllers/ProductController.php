@@ -7,12 +7,15 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Models\User;
 use App\Models\Menu;
-use DB;
-class MenuController extends Controller
-{
+use App\Models\Product;
 
-    public function __construct(Menu $menu){
-        $this->menu = $menu;
+use DB;
+
+
+class ProductController extends Controller
+{
+    public function __construct(Product $product){
+        $this->product = $product;
     }
     /**
      * Display a listing of the resource.
@@ -21,11 +24,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-
-        $index = Menu::get();
+        $index = Product::get();
         return response()->json($index);
-
-        
     }
 
     /**
@@ -36,10 +36,12 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-
-        $data = Menu::create([
+        $data = Product::create([
             'name'=> $request -> name, 
-            'user_id'=> Auth::user()-> id,
+            'content'=> $request -> content, 
+            'user_id'=> 13,
+            'menu_id'=> $request ->menu_id,
+
         ]);
         return response()->json($data);
     }
@@ -52,11 +54,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-
-        $idMenu = $this -> menu->find($id);
-        return response([
-            'data' => $idMenu
-        ]);
+        //
     }
 
     /**
@@ -68,19 +66,7 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-       
-        $menuUpdate = $this -> menu->find($id);
-        $menuUpdate ->update ([
-            'name'=>$request->name,
-            // 'user_id' => Auth::user()->id 
-            
-        ]);
-       
-        return response([
-            'data' => $menuUpdate,
-        ]);
-
+        //
     }
 
     /**
@@ -91,11 +77,6 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        $menuDelete = $this -> menu->find($id);
-        $menuDelete->delete();
-        return response([
-            'message' => 'đã xóa'
-        ]);
-
+        //
     }
 }
