@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\News;
+use App\Models\Menu;
 use App\Http\Requests\NewRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class newApiController extends Controller
 {
 
-    public function __construct(News $new)
+    public function __construct(News $new, Menu $menu)
     {
         $this->new = $new;
+        $this->menu = $menu;
     }
     /**
      * Display a listing of the resource.
@@ -37,17 +40,27 @@ class newApiController extends Controller
      */
     public function store(NewRequest $request)
     {
-        $storeData = $this->new->create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'menu_id' => $request->menu_id,
-            'user_id' => Auth::user()->id
-        ]);
+        $check =$this->menu->where('id', $request->menu_id)->exists();
+           if($check){
+                $storeData = $this->new->create([
+                'title' => $request->title,
+                'content' => $request->content,
+                'menu_id' => $request->menu_id,
+                'user_id' => Auth::user()->id
+            ]);
 
-        return response([
-            'message' => 'Create thành công',
-            'data' => $storeData
-        ]);
+            return response([
+                'message' => 'Create thành công',
+                'data' => $storeData
+            ]);
+
+           }else{
+                return response([
+                    'error' =>'Không tồn tại menu_id'
+                ]);
+           }
+
+
     }
 
     /**
@@ -59,6 +72,11 @@ class newApiController extends Controller
     public function show($id)
     {
         $getOneData = $this->new->find($id);
+        if(!$getOneData){
+            return response([
+                'message' => 'Lấy dữ liệu thất bại'
+            ]);
+        }
         return response([
             'message' => 'Lấy dữ liệu với id = '. $id,
             'data' => $getOneData
@@ -75,13 +93,32 @@ class newApiController extends Controller
     public function update(NewRequest $request, $id)
     {
         $dataUpate = $this->new->find($id);
-        $dataUpate->update([
-            'title' => $request->title,
-            'content' => $request->content,
-            'menu_id' => $request->menu_id,
-            'user_id' => Auth::user()->id
-        ]);
-        return response('Updata thành công');
+
+        if($dataUpate){
+            $check =$this->menu->where('id', $request->menu_id)->exists();
+            if($check){
+                $dataUpate->update([
+                        'title' => $request->title,
+                        'content' => $request->content,
+                        'menu_id' => $request->menu_id,
+                        'user_id' => Auth::user()->id
+                    ]);
+                return response([
+                    'massage' => 'Updata thành công',
+                    'data' => $dataUpate
+                ]);
+            }else{
+                return response([
+                    'error' => 'Không tồn tại menu_id'
+                ]);
+            }
+
+        }else{
+            return response([
+                'error' => 'Dữ liệu không tồn tại'
+            ]);
+        }
+
     }
 
     /**
@@ -92,7 +129,15 @@ class newApiController extends Controller
      */
     public function destroy($id)
     {
-        $this->new->find($id)->delete();
-        return response('Xóa Thành Công');
+        $deletes = $this->new->find($id);
+        if(!$deletes){
+            return response([
+                'error' => 'Xóa Không Thành Công'
+            ]);
+        }
+        $deletes->delete();
+        return response([
+            'massage' => 'Xóa Thành Công'
+        ]);
     }
 }

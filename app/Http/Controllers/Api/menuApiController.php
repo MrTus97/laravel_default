@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Http\Requests\MenuRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class menuApiController extends Controller
 {
@@ -41,7 +42,6 @@ class menuApiController extends Controller
             'name' => $request->name,
             'user_id' => Auth::user()->id
         ]);
-
         return response([
             'message' => 'Create thành công',
             'data' => $storeData
@@ -57,6 +57,12 @@ class menuApiController extends Controller
     public function show($id)
     {
         $getOneData = $this->menu->find($id);
+        if(!$getOneData){
+            return response([
+                'error' => 'Dữ liệu không tồn tại'
+
+            ]);
+        }
         return response([
             'message' => 'Lấy dữ liệu với id = '. $id,
             'data' => $getOneData
@@ -73,11 +79,19 @@ class menuApiController extends Controller
     public function update(MenuRequest $request, $id)
     {
         $dataUpate = $this->menu->find($id);
+        if(!$dataUpate){
+            return response([
+                'error' =>'Updata không thành công'
+            ]);
+        }
         $dataUpate->update([
             'name' => $request->name,
             'user_id' => Auth::user()->id
         ]);
-        return response('Updata thành công');
+        return response([
+            'message' => 'Updata thành công',
+            'data' => $dataUpate
+        ]);
     }
 
     /**
@@ -88,7 +102,16 @@ class menuApiController extends Controller
      */
     public function destroy($id)
     {
-        $this->menu->find($id)->delete();
-        return response('Xóa Thành Công');
+        $deletes = $this->menu->find($id);
+        if(!$deletes){
+            return response([
+                'error' => 'Xóa Không Thành Công'
+            ]);
+        }
+        $deletes->delete();
+        return response([
+            'message' => 'Xóa Thành Công'
+        ]);
+
     }
 }

@@ -57,9 +57,12 @@ class userApiController extends Controller
                 'user' => $users
             ]);
         }else{
-            return 'Đăng ký không thành công';
+            return response([
+                'error' => 'Đăng nhập không thành công'
+            ]);
         }
     }
+
     /**
      * Display a listing of the resource.
      *
