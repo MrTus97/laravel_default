@@ -28,7 +28,8 @@ class NewRequest extends FormRequest
         return [
             'title' => 'required',
             'content' => 'required',
-            'menu_id' => 'required'
+            'menu_id' => 'required',
+            'image_path' => 'required'
         ];
     }
     public function messages()
@@ -36,7 +37,8 @@ class NewRequest extends FormRequest
         return [
             'title' => 'Không được để trống!',
             'content' => 'Không được để trống!',
-            'menu_id' => 'Không được để trống!'
+            'menu_id' => 'Không được để trống!',
+            'image_path' => 'Không được để trống!'
         ];
     }
     public function failedValidation(Validator $validator)

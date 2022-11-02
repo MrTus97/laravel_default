@@ -21,7 +21,7 @@ class JwtMiddleware
         try {
             JWTAuth::parseToken()->authenticate();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
                 return response()->json(['status' => 'token không hợp lệ']);
 
