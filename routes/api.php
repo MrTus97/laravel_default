@@ -63,14 +63,12 @@ use App\Http\Middleware\VerifyJWTToken;
 // Route::get('/test', function () {
 //     return 'abcv0';
 // }) -> middleware('jwt.auth');
+Route::post('menu/addmenu', [MenuController::class, 'store'])->middleware(VerifyJWTToken::class);
 
-Route::group([
-    ['middleware' => ['jwt.auth']],
-    // 'middleware' => 'api',
-], function ($router) {
+Route::group(['middleware' => 'jwt.auth'], function () {
     Route::prefix('menu')->group(function () {
         Route::get('/viewmenu', [MenuController::class, 'index']); 
-        Route::post('/addmenu', [MenuController::class, 'store']); 
+        // Route::post('/addmenu', [MenuController::class, 'store']); 
         Route::post('/id_viewMenu/{id}', [MenuController::class, 'show']);
         Route::put('/updatemenu/{id}', [MenuController::class, 'update']);  
         Route::delete('/deletemenu/{id}', [MenuController::class, 'destroy']);
