@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use App\Models\User;
 use App\Http\Requests\MenuRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ class menuApiController extends Controller
      */
     public function index()
     {
+
         $dataMenu = $this->menu->get();
         return response([
             'message' => 'Show all dữ liệu',
@@ -57,6 +59,7 @@ class menuApiController extends Controller
     public function show($id)
     {
         $getOneData = $this->menu->find($id);
+
         if(!$getOneData){
             return response([
                 'error' => 'Dữ liệu không tồn tại'

@@ -25,7 +25,9 @@ class newApiController extends Controller
      */
     public function index()
     {
+
         $dataAll = $this->new->get();
+
         return response([
             'message' => 'Show all dữ liệu',
             'data' => $dataAll
@@ -40,13 +42,21 @@ class newApiController extends Controller
      */
     public function store(NewRequest $request)
     {
+
         $check =$this->menu->where('id', $request->menu_id)->exists();
            if($check){
+                $uploadFolder = 'news';
+                $image = $request->file('image_path');
+                $nameImage = $image->getClientOriginalName();
+                $image_path = $nameImage->store($uploadFolder, 'public');
+
                 $storeData = $this->new->create([
-                'title' => $request->title,
-                'content' => $request->content,
-                'menu_id' => $request->menu_id,
-                'user_id' => Auth::user()->id
+                    'title' => $request->title,
+                    'content' => $request->content,
+                    'menu_id' => $request->menu_id,
+                    'user_id' => Auth::user()->id,
+                    'image_name' => $nameImage,
+                    'image_path' => '/storage/'.$image_path
             ]);
 
             return response([
@@ -59,6 +69,8 @@ class newApiController extends Controller
                     'error' =>'Không tồn tại menu_id'
                 ]);
            }
+
+
 
 
     }
