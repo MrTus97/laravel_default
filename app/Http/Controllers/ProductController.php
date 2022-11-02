@@ -54,7 +54,10 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $idProduct = $this -> product->find($id);
+        return response([
+            'data' => $idProduct
+        ]);
     }
 
     /**
@@ -66,7 +69,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+        $productUpdate = $this -> product->find($id);
+        $productUpdate ->update ([
+            'name'=>$request->name,
+            'user_id'=> 13,
+            'menu_id'=> $request ->menu_id,
+            // 'user_id' => Auth::user()->id 
+            
+        ]);
+       
+        return response([
+            'data' => $productUpdate,
+        ]);
+
     }
 
     /**
@@ -77,6 +93,11 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $productDelete = $this -> product->find($id);
+        $productDelete->delete();
+        return response([
+            'message' => 'đã xóa product'
+        ]);
+
     }
 }
