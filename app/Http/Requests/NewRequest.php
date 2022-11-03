@@ -35,10 +35,10 @@ class NewRequest extends FormRequest
     public function messages()
     {
         return [
-            'title' => 'Không được để trống!',
-            'content' => 'Không được để trống!',
-            'menu_id' => 'Không được để trống!',
-            'image_path' => 'Không được để trống!'
+            'title.required' => 'Không được để trống!',
+            'content.required' => 'Không được để trống!',
+            'menu_id.required' => 'Không được để trống!',
+            'image_path.required' => 'Không được để trống!'
         ];
     }
     public function failedValidation(Validator $validator)

@@ -32,7 +32,7 @@ class MenuRequest extends FormRequest
     public function messages()
     {
         return [
-            'name' => 'Không được để trống!'
+            'name.required' => 'Không được để trống!'
         ];
     }
     public function failedValidation(Validator $validator)
