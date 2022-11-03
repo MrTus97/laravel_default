@@ -23,7 +23,7 @@ class JwtMiddleware
 
         } catch (\Exception $e) {
 
-                return response()->json(['status' => 'token không hợp lệ']);
+                return response()->json(['error' => 'Bạn không có quyền truy cập']);
 
         }
         return $next($request);

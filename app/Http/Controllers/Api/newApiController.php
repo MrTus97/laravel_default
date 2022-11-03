@@ -88,7 +88,7 @@ class newApiController extends Controller
         $getOneData = $this->new->find($id);
         if(!$getOneData){
             return response([
-                'message' => 'Lấy dữ liệu thất bại'
+                'error' => 'Lấy dữ liệu thất bại'
             ]);
         }
         return response([
@@ -111,11 +111,18 @@ class newApiController extends Controller
         if($dataUpate){
             $check =$this->menu->where('id', $request->menu_id)->exists();
             if($check){
+                $uploadFolder = 'news';
+                $image = $request->file('image_path');
+                $image_path = $image->store($uploadFolder, 'public');
+                $nameImage = basename($image_path);
+
                 $dataUpate->update([
                         'title' => $request->title,
                         'content' => $request->content,
                         'menu_id' => $request->menu_id,
-                        'user_id' => Auth::user()->id
+                        'user_id' => Auth::user()->id,
+                        'image_name' => $nameImage,
+                        'image_path' => '/storage/'.$image_path
                     ]);
                 return response([
                     'massage' => 'Updata thành công',
