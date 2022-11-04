@@ -43,9 +43,6 @@ class newApiController extends Controller
     public function store(NewRequest $request)
     {
 
-
-
-
         $check =$this->menu->where('id', $request->menu_id)->exists();
            if($check){
                 $uploadFolder = 'news';
@@ -56,10 +53,16 @@ class newApiController extends Controller
                     'title' => $request->title,
                     'content' => $request->content,
                     'menu_id' => $request->menu_id,
+                    'desration' => $request->desration,
                     'user_id' => Auth::user()->id,
                     'image_name' => $nameImage,
                     'image_path' => '/storage/'.$image_path
             ]);
+            $storeData->tag()->attach([
+                // 1,2,3
+                'tag' => $request->tag
+            ]);
+            $storeData->tag;
 
             return response([
                 'message' => 'Create thành công',
@@ -91,6 +94,7 @@ class newApiController extends Controller
                 'error' => 'Lấy dữ liệu thất bại'
             ]);
         }
+        $getOneData->tag;
         return response([
             'message' => 'Lấy dữ liệu với id = '. $id,
             'data' => $getOneData
@@ -121,9 +125,15 @@ class newApiController extends Controller
                         'content' => $request->content,
                         'menu_id' => $request->menu_id,
                         'user_id' => Auth::user()->id,
+                        'desration' => $request->desration,
                         'image_name' => $nameImage,
                         'image_path' => '/storage/'.$image_path
                     ]);
+                    $dataUpate->tag()->sync([
+                        // 1,2,3
+                        'tag' => $request->tag
+                    ]);
+                    $dataUpate->tag;
                 return response([
                     'massage' => 'Updata thành công',
                     'data' => $dataUpate

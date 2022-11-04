@@ -29,6 +29,7 @@ class NewRequest extends FormRequest
             'title' => 'required',
             'content' => 'required',
             'menu_id' => 'required',
+            'desration' =>'required',
             'image_path' => 'required'
         ];
     }
@@ -38,7 +39,8 @@ class NewRequest extends FormRequest
             'title.required' => 'Không được để trống!',
             'content.required' => 'Không được để trống!',
             'menu_id.required' => 'Không được để trống!',
-            'image_path.required' => 'Không được để trống!'
+            'image_path.required' => 'Không được để trống!',
+            'desration.required' => 'Không được để trống!'
         ];
     }
     public function failedValidation(Validator $validator)

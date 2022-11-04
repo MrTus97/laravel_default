@@ -12,26 +12,38 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class userApiController extends Controller
 {
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
+    // public function __construct(User $user)
+    // {
+    //     $this->user = $user;
+    // }
 
     public function register(Request $request)
     {
+
+
+
         try {
             DB::beginTransaction();
-
-            $data = $this->user->create([
+            DB::connection()->enableQueryLog();
+                $data = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
-
+            $data->getInfoUser()->create([
+                'avatar' => $request->avatar,
+                'phone' => $request->phone
+            ]);
+            $data->getInfoUser;
+            $queries = DB::getQueryLog();
             DB::commit();
             return response([
                 'message' => 'Đăng Ký Thành Công',
-                'data' => $data
+                'data' => [
+                    $data
+                ]
+
+
             ]);
         } catch (\Exception $e) {
             //throw $th;
@@ -49,9 +61,9 @@ class userApiController extends Controller
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
 
-            $users = $this->user->where('email', $email)->first();
+            $users = User::where('email', $email)->first();
             $token = JWTAuth::fromUser($users);
-
+            $users->getInfoUser;
             return response()->json([
                 'token' => $token,
                 'user' => $users
@@ -70,7 +82,13 @@ class userApiController extends Controller
      */
     public function index()
     {
-        //
+        $data = User::find(Auth::user()->id);
+        $data->getInfoUser;
+
+        return response([
+            'user' => $data,
+        ]);
+
     }
 
     /**

@@ -4,20 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Model\User;
 
-class Menu extends Model
+class infoUser extends Model
 {
-
     use HasFactory;
-
-    protected $table = 'menus';
+    protected $table = 'info_users';
     protected $fillable = [
-        'name',
-        'user_id'
+        'avatar' ,
+        'phone'
     ];
-
     public function getUser(){
-        return $this->belongsTo(User::class,'user_id');
+
+        return $this->belongsTo(User::class);
+
     }
 }

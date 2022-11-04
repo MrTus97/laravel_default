@@ -48,10 +48,12 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         //     Route::delete('delete/{id}', [newApiController::class, 'destroy']);
         // });
     });
+    Route::get('info', [userApiController::class, 'index']);
 });
 Route::prefix('users')->group(function(){
     Route::post('register', [userApiController::class, 'register']);
     Route::get('login', [userApiController::class, 'login']);
+
 
 });
 

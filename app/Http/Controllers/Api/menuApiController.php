@@ -25,6 +25,7 @@ class menuApiController extends Controller
     {
 
         $dataMenu = $this->menu->get();
+
         return response([
             'message' => 'Show all dữ liệu',
             'data' => $dataMenu
@@ -59,7 +60,7 @@ class menuApiController extends Controller
     public function show($id)
     {
         $getOneData = $this->menu->find($id);
-
+        $getOneData->getUser;
         if(!$getOneData){
             return response([
                 'error' => 'Dữ liệu không tồn tại'

@@ -9,10 +9,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Menu;
+use App\Models\infoUser;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'users';
+
 
     /**
      * The attributes that are mass assignable.
@@ -56,6 +60,8 @@ class User extends Authenticatable implements JWTSubject
 
         ];
     }
-
+    public function getInfoUser(){
+        return $this->hasOne(infoUser::class,'user_id');
+    }
 
 }
