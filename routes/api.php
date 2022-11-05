@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\menuApiController;
 use App\Http\Controllers\Api\newApiController;
 use App\Http\Controllers\Api\userApiController;
+use App\Http\Controllers\Api\tagApiController;
+use App\Http\Controllers\Api\commentApiController;
+use App\Http\Controllers\Api\roleApiController;
 
 
 /*
@@ -47,8 +50,24 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         //     Route::put('update/{id}', [newApiController::class, 'update']);
         //     Route::delete('delete/{id}', [newApiController::class, 'destroy']);
         // });
+        // Tag====================================
+
+        Route::apiResource('tags', tagApiController::class);
+
+        //comment ====================================
+
+        Route::apiResource('comments', commentApiController::class);
+
+        //role ===================================
+        Route::apiResource('roles', roleApiController::class);
     });
+
+
+
     Route::get('info', [userApiController::class, 'index']);
+    Route::put('user/update/{id}', [userApiController::class, 'update']);
+
+
 });
 Route::prefix('users')->group(function(){
     Route::post('register', [userApiController::class, 'register']);

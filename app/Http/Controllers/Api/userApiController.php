@@ -19,9 +19,6 @@ class userApiController extends Controller
 
     public function register(Request $request)
     {
-
-
-
         try {
             DB::beginTransaction();
             DB::connection()->enableQueryLog();
@@ -84,6 +81,9 @@ class userApiController extends Controller
     {
         $data = User::find(Auth::user()->id);
         $data->getInfoUser;
+        $data->getRole;
+        $data->getMenu;
+        $data->getNew;
 
         return response([
             'user' => $data,
@@ -124,7 +124,44 @@ class userApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+            // DB::connection()->enableQueryLog();
+            $getUser = User::find($id);
+                $data = $getUser->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'permission' => $request->permission
+
+            ]);
+
+            if(($request->permission) == 0){
+                $getUser->setRole()->sync([1,2,3,4]);
+
+            }else if(($request->permission) == 1){
+                $getUser->setRole()->sync([1]);
+            }
+
+            $getUser->getInfoUser;
+            // $queries = DB::getQueryLog();
+            DB::commit();
+            return response([
+                'message' => 'Update Thành Công',
+                'data' => [
+                    $getUser
+                ]
+
+
+            ]);
+        } catch (\Exception $e) {
+            //throw $th;
+            DB::rollback();
+            return response([
+                'error' => 'Update Không Thành Công',
+            ]);
+        }
     }
 
     /**

@@ -9,7 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Menu;
+use App\Models\News;
 use App\Models\infoUser;
+use App\Models\Role;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -27,6 +29,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'permission'
     ];
 
     /**
@@ -56,12 +59,22 @@ class User extends Authenticatable implements JWTSubject
      * @return array
      */
     public function getJWTCustomClaims() {
-        return [
-
-        ];
+        return [];
     }
     public function getInfoUser(){
         return $this->hasOne(infoUser::class,'user_id');
+    }
+    public function getMenu(){
+        return $this->hasMany(Menu::class,'user_id');
+    }
+    public function getNew(){
+        return $this->hasMany(News::class,'user_id');
+    }
+    public function setRole(){
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+    public function getRole(){
+        return $this->belongsToMany(Role::class);
     }
 
 }

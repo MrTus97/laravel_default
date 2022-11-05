@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\DB;
 class menuApiController extends Controller
 {
 
-    public function __construct(Menu $menu){
-        $this->menu = $menu;
-    }
+    // public function __construct(Menu $menu){
+    //     $this->menu = $menu;
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -23,12 +23,15 @@ class menuApiController extends Controller
      */
     public function index()
     {
+        // //tẽt
+        // $data = User::has('menus.name')->get();
 
-        $dataMenu = $this->menu->get();
+        $dataMenu = DB::table('menus')->get();
+        // $dataMenu->getUser;
 
         return response([
             'message' => 'Show all dữ liệu',
-            'data' => $dataMenu
+            'data' => $data
         ]);
     }
 
@@ -41,10 +44,11 @@ class menuApiController extends Controller
     public function store(MenuRequest $request)
     {
 
-        $storeData = $this->menu->create([
+        $storeData = Menu::create([
             'name' => $request->name,
             'user_id' => Auth::user()->id
         ]);
+        $storeData->getUser;
         return response([
             'message' => 'Create thành công',
             'data' => $storeData
@@ -59,8 +63,9 @@ class menuApiController extends Controller
      */
     public function show($id)
     {
-        $getOneData = $this->menu->find($id);
+        $getOneData = Menu::find($id);
         $getOneData->getUser;
+        $getOneData->getNews;
         if(!$getOneData){
             return response([
                 'error' => 'Dữ liệu không tồn tại'
@@ -82,7 +87,7 @@ class menuApiController extends Controller
      */
     public function update(MenuRequest $request, $id)
     {
-        $dataUpate = $this->menu->find($id);
+        $dataUpate = Menu::find($id);
         if(!$dataUpate){
             return response([
                 'error' =>'Updata không thành công'
@@ -92,6 +97,7 @@ class menuApiController extends Controller
             'name' => $request->name,
             'user_id' => Auth::user()->id
         ]);
+        $dataUpate->getUser;
         return response([
             'message' => 'Updata thành công',
             'data' => $dataUpate
@@ -106,7 +112,7 @@ class menuApiController extends Controller
      */
     public function destroy($id)
     {
-        $deletes = $this->menu->find($id);
+        $deletes = Menu::find($id);
         if(!$deletes){
             return response([
                 'error' => 'Xóa Không Thành Công'

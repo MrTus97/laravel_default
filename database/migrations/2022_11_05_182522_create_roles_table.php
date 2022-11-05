@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::create('news_tag', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId('new_id')->constrained('news');
-        //     $table->foreignId('tag_id')->constrained('tag');
-        //     $table->timestamps();
-        // });
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('news_tag');
+        Schema::dropIfExists('roles');
     }
 };

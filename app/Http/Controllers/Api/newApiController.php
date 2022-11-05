@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Auth;
 class newApiController extends Controller
 {
 
-    public function __construct(News $new, Menu $menu)
-    {
-        $this->new = $new;
-        $this->menu = $menu;
-    }
+    // public function __construct(News $new, Menu $menu)
+    // {
+    //     $this->new = $new;
+    //     $this->menu = $menu;
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +26,7 @@ class newApiController extends Controller
     public function index()
     {
 
-        $dataAll = $this->new->get();
+        $dataAll = DB::table('news')->get();
 
         return response([
             'message' => 'Show all dữ liệu',
@@ -43,13 +43,13 @@ class newApiController extends Controller
     public function store(NewRequest $request)
     {
 
-        $check =$this->menu->where('id', $request->menu_id)->exists();
+        $check =Menu::where('id', $request->menu_id)->exists();
            if($check){
                 $uploadFolder = 'news';
                 $image = $request->file('image_path');
                 $image_path = $image->store($uploadFolder, 'public');
                 $nameImage = basename($image_path);
-                $storeData = $this->new->create([
+                $storeData = News::create([
                     'title' => $request->title,
                     'content' => $request->content,
                     'menu_id' => $request->menu_id,
@@ -62,6 +62,8 @@ class newApiController extends Controller
                 // 1,2,3
                 'tag' => $request->tag
             ]);
+            $storeData->user;
+            $storeData->menu;
             $storeData->tag;
 
             return response([
@@ -88,13 +90,17 @@ class newApiController extends Controller
      */
     public function show($id)
     {
-        $getOneData = $this->new->find($id);
+        $getOneData = News::where('id',$id);
         if(!$getOneData){
             return response([
                 'error' => 'Lấy dữ liệu thất bại'
             ]);
         }
+        $getOneData->user;
+        $getOneData->menu;
         $getOneData->tag;
+        $getOneData->getComment;
+
         return response([
             'message' => 'Lấy dữ liệu với id = '. $id,
             'data' => $getOneData
@@ -110,10 +116,10 @@ class newApiController extends Controller
      */
     public function update(NewRequest $request, $id)
     {
-        $dataUpate = $this->new->find($id);
+        $dataUpate = News::find($id);
 
         if($dataUpate){
-            $check =$this->menu->where('id', $request->menu_id)->exists();
+            $check = Menu::where('id', $request->menu_id)->exists();
             if($check){
                 $uploadFolder = 'news';
                 $image = $request->file('image_path');
@@ -133,6 +139,8 @@ class newApiController extends Controller
                         // 1,2,3
                         'tag' => $request->tag
                     ]);
+                    $dataUpate->user;
+                    $dataUpate->menu;
                     $dataUpate->tag;
                 return response([
                     'massage' => 'Updata thành công',
@@ -167,8 +175,8 @@ class newApiController extends Controller
             ]);
         }
         $deletes->delete();
-        return response([
-            'massage' => 'Xóa Thành Công'
-        ]);
+            return response([
+                'massage' => 'Xóa Thành Công'
+            ]);
     }
 }
