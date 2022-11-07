@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\News;
 use App\Models\comment;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\Comment\CommentReposityInterface;
 
 class commentApiController extends Controller
 {
+    private $Comment;
+    public function __construct(CommentReposityInterface $Comment)
+    {
+        $this->Comment = $Comment;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +23,7 @@ class commentApiController extends Controller
      */
     public function index()
     {
-        $data = DB::table('comments')->get();
-        return response([
-            'message' => 'get all data',
-            'data' => $data
-        ]);
+        return $this->Comment->getAll();
     }
 
     /**
@@ -32,7 +34,7 @@ class commentApiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->Comment->createData($request);
     }
 
     /**
@@ -43,13 +45,7 @@ class commentApiController extends Controller
      */
     public function show($id)
     {
-        $dataId = comment::find($id);
-        $dataId->getUser;
-        $dataId->getNew;
-        return response([
-            'message' => 'get data follew id',
-            'data' => $dataId
-        ]);
+        return $this->Comment->getDataId($id);
     }
 
     /**
@@ -61,7 +57,7 @@ class commentApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->Comment->updateData($id,$request);
     }
 
     /**
@@ -72,6 +68,6 @@ class commentApiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->Comment->deleteData($id);
     }
 }

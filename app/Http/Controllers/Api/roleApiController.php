@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\Role\RoleReposityInterface; 
+
 
 class roleApiController extends Controller
 {
+    private $role;
+    public function __construct(RoleReposityInterface $role)
+    {
+        $this->role = $role;
+    }
      /**
      * Display a listing of the resource.
      *
@@ -17,11 +24,7 @@ class roleApiController extends Controller
      */
     public function index()
     {
-        $data = DB::table('roles')->get();
-        return response([
-            'message' => 'get all data',
-            'data' => $data
-        ]);
+        return $this->role->getAll();
     }
 
     /**
@@ -32,19 +35,8 @@ class roleApiController extends Controller
      */
     public function store(Request $request)
     {
-        $insertData = DB::table('roles')->insert([
-            'name' => $request->name
-        ]);
-        if(!$insertData){
-            return response([
-                'error' => ' Error insert data table role',
 
-            ]);
-        }
-        return response([
-            'message' => 'insert data table role',
-            // 'data' => $insertData
-        ]);
+        return $this->role->createData($request);
     }
 
     /**
@@ -54,14 +46,8 @@ class roleApiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        $dataId = Role::find($id);
-        // $dataId->getUser;
-        // $dataId->getNew;
-        return response([
-            'message' => 'get data follew id',
-            'data' => $dataId
-        ]);
+    { 
+        return $this->role->getDataId($id);
     }
 
     /**
@@ -73,20 +59,7 @@ class roleApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $insertData = DB::table('roles')->where('id',$id)->update([
-            'name' => $request->name
-        ]);
-        if(!$insertData){
-            return response([
-                'error' => ' Error Update data table role',
-
-            ]);
-        }
-        return response([
-            'message' => 'Update data table role',
-            // 'data' => $insertData
-        ]);
+        return $this->role->updateData($id,$request);
     }
 
     /**
@@ -97,6 +70,6 @@ class roleApiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->role->deleteData($id);
     }
 }

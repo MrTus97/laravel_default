@@ -5,9 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\models\tag;
+use App\Repositories\Tag\TagReposityInterface; 
 
 class tagApiController extends Controller
 {
+
+    private $tag;
+    public function __construct(TagReposityInterface $tag)
+    {
+        $this->tag = $tag;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,11 +22,7 @@ class tagApiController extends Controller
      */
     public function index()
     {
-        $data = tag::get();
-        return response([
-            'message' => 'get all data',
-            'data' => $data
-        ]);
+        return $this->tag->getAll();
     }
 
     /**
@@ -41,12 +44,7 @@ class tagApiController extends Controller
      */
     public function show($id)
     {
-        $dataId = tag::find($id);
-        $dataId->getNew;
-        return response([
-            'message' => 'get data follow id',
-            'data' => $dataId
-        ]);
+        return $this->tag->getDataId($id);
     }
 
     /**

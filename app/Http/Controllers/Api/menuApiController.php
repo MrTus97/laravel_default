@@ -9,13 +9,17 @@ use App\Models\User;
 use App\Http\Requests\MenuRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\Menu\MenuReposityInterface;
+
+
+
 
 class menuApiController extends Controller
 {
-
-    // public function __construct(Menu $menu){
-    //     $this->menu = $menu;
-    // }
+    private $MenuReposity;
+    public function __construct(MenuReposityInterface $MenuReposity){
+        $this->MenuReposity = $MenuReposity;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -23,16 +27,9 @@ class menuApiController extends Controller
      */
     public function index()
     {
-        // //tẽt
-        // $data = User::has('menus.name')->get();
 
-        $dataMenu = DB::table('menus')->get();
-        // $dataMenu->getUser;
-
-        return response([
-            'message' => 'Show all dữ liệu',
-            'data' => $data
-        ]);
+       return $this->MenuReposity->getAll();
+       
     }
 
     /**
@@ -43,16 +40,7 @@ class menuApiController extends Controller
      */
     public function store(MenuRequest $request)
     {
-
-        $storeData = Menu::create([
-            'name' => $request->name,
-            'user_id' => Auth::user()->id
-        ]);
-        $storeData->getUser;
-        return response([
-            'message' => 'Create thành công',
-            'data' => $storeData
-        ]);
+        return $this->MenuReposity->createMenu($request);
     }
 
     /**
@@ -63,19 +51,7 @@ class menuApiController extends Controller
      */
     public function show($id)
     {
-        $getOneData = Menu::find($id);
-        $getOneData->getUser;
-        $getOneData->getNews;
-        if(!$getOneData){
-            return response([
-                'error' => 'Dữ liệu không tồn tại'
-
-            ]);
-        }
-        return response([
-            'message' => 'Lấy dữ liệu với id = '. $id,
-            'data' => $getOneData
-        ]);
+        return $this->MenuReposity->getMenuId($id);
     }
 
     /**
@@ -87,21 +63,7 @@ class menuApiController extends Controller
      */
     public function update(MenuRequest $request, $id)
     {
-        $dataUpate = Menu::find($id);
-        if(!$dataUpate){
-            return response([
-                'error' =>'Updata không thành công'
-            ]);
-        }
-        $dataUpate->update([
-            'name' => $request->name,
-            'user_id' => Auth::user()->id
-        ]);
-        $dataUpate->getUser;
-        return response([
-            'message' => 'Updata thành công',
-            'data' => $dataUpate
-        ]);
+        return $this->MenuReposity->updateMenu($id,$request);
     }
 
     /**
@@ -112,16 +74,6 @@ class menuApiController extends Controller
      */
     public function destroy($id)
     {
-        $deletes = Menu::find($id);
-        if(!$deletes){
-            return response([
-                'error' => 'Xóa Không Thành Công'
-            ]);
-        }
-        $deletes->delete();
-        return response([
-            'message' => 'Xóa Thành Công'
-        ]);
-
+        return $this->MenuReposity->deleteMenu($id);
     }
 }

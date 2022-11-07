@@ -9,15 +9,16 @@ use App\Models\Menu;
 use App\Http\Requests\NewRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\New\NewReposityInterface; 
 
 class newApiController extends Controller
 {
-
-    // public function __construct(News $new, Menu $menu)
-    // {
-    //     $this->new = $new;
-    //     $this->menu = $menu;
-    // }
+    
+    private $menu;
+    public function __construct(NewReposityInterface $news)
+    {
+        $this->news = $news;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,13 +26,7 @@ class newApiController extends Controller
      */
     public function index()
     {
-
-        $dataAll = DB::table('news')->get();
-
-        return response([
-            'message' => 'Show all dữ liệu',
-            'data' => $dataAll
-        ]);
+        return $this->news->getAll();
     }
 
     /**
@@ -41,45 +36,8 @@ class newApiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(NewRequest $request)
-    {
-
-        $check =Menu::where('id', $request->menu_id)->exists();
-           if($check){
-                $uploadFolder = 'news';
-                $image = $request->file('image_path');
-                $image_path = $image->store($uploadFolder, 'public');
-                $nameImage = basename($image_path);
-                $storeData = News::create([
-                    'title' => $request->title,
-                    'content' => $request->content,
-                    'menu_id' => $request->menu_id,
-                    'desration' => $request->desration,
-                    'user_id' => Auth::user()->id,
-                    'image_name' => $nameImage,
-                    'image_path' => '/storage/'.$image_path
-            ]);
-            $storeData->tag()->attach([
-                // 1,2,3
-                'tag' => $request->tag
-            ]);
-            $storeData->user;
-            $storeData->menu;
-            $storeData->tag;
-
-            return response([
-                'message' => 'Create thành công',
-                'data' => $storeData
-            ]);
-
-           }else{
-                return response([
-                    'error' =>'Không tồn tại menu_id'
-                ]);
-           }
-
-
-
-
+    {   
+        return $this->news->createNew($request);
     }
 
     /**
@@ -90,21 +48,7 @@ class newApiController extends Controller
      */
     public function show($id)
     {
-        $getOneData = News::where('id',$id);
-        if(!$getOneData){
-            return response([
-                'error' => 'Lấy dữ liệu thất bại'
-            ]);
-        }
-        $getOneData->user;
-        $getOneData->menu;
-        $getOneData->tag;
-        $getOneData->getComment;
-
-        return response([
-            'message' => 'Lấy dữ liệu với id = '. $id,
-            'data' => $getOneData
-        ]);
+        return $this->news->getNewId($id);
     }
 
     /**
@@ -116,48 +60,7 @@ class newApiController extends Controller
      */
     public function update(NewRequest $request, $id)
     {
-        $dataUpate = News::find($id);
-
-        if($dataUpate){
-            $check = Menu::where('id', $request->menu_id)->exists();
-            if($check){
-                $uploadFolder = 'news';
-                $image = $request->file('image_path');
-                $image_path = $image->store($uploadFolder, 'public');
-                $nameImage = basename($image_path);
-
-                $dataUpate->update([
-                        'title' => $request->title,
-                        'content' => $request->content,
-                        'menu_id' => $request->menu_id,
-                        'user_id' => Auth::user()->id,
-                        'desration' => $request->desration,
-                        'image_name' => $nameImage,
-                        'image_path' => '/storage/'.$image_path
-                    ]);
-                    $dataUpate->tag()->sync([
-                        // 1,2,3
-                        'tag' => $request->tag
-                    ]);
-                    $dataUpate->user;
-                    $dataUpate->menu;
-                    $dataUpate->tag;
-                return response([
-                    'massage' => 'Updata thành công',
-                    'data' => $dataUpate
-                ]);
-            }else{
-                return response([
-                    'error' => 'Không tồn tại menu_id'
-                ]);
-            }
-
-        }else{
-            return response([
-                'error' => 'Dữ liệu không tồn tại'
-            ]);
-        }
-
+        return $this->news->updateNew($id,$request);
     }
 
     /**
@@ -168,15 +71,7 @@ class newApiController extends Controller
      */
     public function destroy($id)
     {
-        $deletes = $this->new->find($id);
-        if(!$deletes){
-            return response([
-                'error' => 'Xóa Không Thành Công'
-            ]);
-        }
-        $deletes->delete();
-            return response([
-                'massage' => 'Xóa Thành Công'
-            ]);
+        
+            return $this->news->deleteNew($id);
     }
 }
