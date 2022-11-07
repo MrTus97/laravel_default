@@ -24,7 +24,7 @@ class VerifyJWTToken
             $user = JWTAuth::parseToken()->authenticate();
         }catch (JWTException $e) {
            
-            return response()->json(['error'=>'Token is required']);
+            return response()->json(['error'=>'Token is required'],401);
         }
         
         return $next($request);

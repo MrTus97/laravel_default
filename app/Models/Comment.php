@@ -4,18 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DB;
-class Menu extends Model
+
+class Comment extends Model
 {
     use HasFactory;
+    protected $table ='comments';
+    protected $fillable=['content','product_id','user_id'];
 
-    protected $table ='menus';
-
-    protected $fillable =['name', 'user_id'];
-    
     public function user() {
         return $this-> belongsTo(User::class);
     }
-    
-
 }

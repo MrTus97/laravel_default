@@ -8,7 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Models\User;
 use App\Models\Menu;
 use App\Models\Product;
-
+use Illuminate\Database\Eloquent\Builder;
 use DB;
 
 
@@ -24,8 +24,22 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $index = Product::get();
+    
+        $index = Product::whereHas('comments', function (Builder $query) {
+            $query->where('content', 'like', '%cay%');
+        })->get();
+        // $index = Product::get();
         return response()->json($index);
+
+        
+        // $data = Product::find(2);
+        // $data ->orders;
+        // // $data ->post;
+        // return response([
+        //     'data'=> $data,
+
+        // ]);
+        
     }
 
     /**
@@ -43,6 +57,7 @@ class ProductController extends Controller
             'menu_id'=> $request ->menu_id,
 
         ]);
+      
         return response()->json($data);
     }
 
@@ -54,9 +69,18 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $idProduct = $this -> product->find($id);
+        
+        
+        $data = Product::find($id);
+        $data ->orders;
+        $data ->comments;
+        $data ->user;
+
+
+        // $data ->post;
         return response([
-            'data' => $idProduct
+            'data'=> $data,
+
         ]);
     }
 

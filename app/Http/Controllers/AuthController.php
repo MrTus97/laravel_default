@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Address;
+use App\Models\Post;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;  
 use Illuminate\Support\Facades\Hash;
 
@@ -12,25 +16,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    // khoi tạo các thuộc tính
 
-    public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
+    
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function login(Request $request){
     	$validator = Validator::make($request->all(), [
             'email' => 'required|email',
+            // 'number'=>'required|integer',
             'password' => 'required|string|min:6',
         ]);
         
@@ -45,10 +37,30 @@ class AuthController extends Controller
         return $this->createNewToken($token);
         
     }
-    public function getId()
-    {
-        return $this->id;
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function createNewToken($token){
+        
+        return response()->json([
+            'message' => 'login thành công',
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'user' => auth()->user()     
+            
+        ]);
     }
+
+    public function logout() {
+        auth()->logout();
+
+        return response()->json(['message' => 'logout thành công']);
+    }
+ 
 
     /**
      * Register a User.
@@ -68,13 +80,23 @@ class AuthController extends Controller
         }
 
         $user = User::create(array_merge(
-                    $validator->validated(),
-                    ['password' => bcrypt($request->password)]
-                ));
+            $validator->validated(),
+            ['password' => bcrypt($request->password)],
+            
+        ));
 
+        $user -> address() ->create([
+            'street'=> $request -> street, 
+            'state'=> $request -> state, 
+            'city'=> $request -> city, 
+
+        ]);
+       
+
+        $user->address;
         return response()->json([
             'message' => 'đk thành công',
-            'user' => $user
+            'user' => $user,
         ], 201);
     }
 
@@ -84,23 +106,20 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function userProfile() {
-        return response()->json(auth()->user());
+    public function userProfile() {     
+
+            // / ->join('comments', 'users.id', '=', 'comments.user_id')->get();
+        $data = User::find(Auth::user()->id);
+        $data ->address;
+        $data ->post;
+        $data ->order;
+        $data ->comments;
+        return response([
+            'data'=> $data,
+
+        ]);
+        
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token){
-        return response()->json([
-            'message' => 'login thành công',
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'user' => auth()->user()
-        ]);
-    }
+    
 }

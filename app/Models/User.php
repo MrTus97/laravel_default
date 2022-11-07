@@ -7,10 +7,37 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Providers\RepositoryServiceProvider;
+
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
+    
+    public function menu()
+    {
+        return $this->hasMany(Menu::class);
+    }
+    public function post()
+    {
+        return $this->hasMany(Post::class);
+    }
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    
+
 
     /**
      * The attributes that are mass assignable.

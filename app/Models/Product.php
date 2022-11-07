@@ -12,4 +12,17 @@ class Product extends Model
 
     protected $fillable =['name','content', 'user_id','menu_id'];
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    public function user() {
+        return $this-> belongsTo(User::class);
+    }
+
 }

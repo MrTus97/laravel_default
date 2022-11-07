@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\MenuRepository;
+
 use App\Http\Controllers\AuthController;
 use App\Models\User;
 use App\Models\Menu;
@@ -11,9 +13,16 @@ use DB;
 class MenuController extends Controller
 {
 
-    public function __construct(Menu $menu){
+    public MenuRepository $MenuRepository;
+
+    public function __construct(MenuRepository $MenuRepository, Menu $menu) 
+    {
         $this->menu = $menu;
+        $this->MenuRepository = $MenuRepository;
     }
+    // public function __construct(Menu $menu){
+    //     $this->menu = $menu;
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -52,8 +61,8 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-
         $idMenu = $this -> menu->find($id);
+        $idMenu  -> user;
         return response([
             'data' => $idMenu
         ]);
