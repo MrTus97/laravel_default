@@ -35,6 +35,11 @@ Route::middleware(VerifyJWTToken::class)->prefix('demo')->group(function(){
     Route::get('/user-profile', [AuthController::class, 'userProfile']); 
     Route::post('/logout', [AuthController::class, 'logout']); 
 
+    Route::get('/user_id', [AuthController::class, 'getuserid']); 
+    Route::get('/user_comment', [AuthController::class, 'getusercm']); 
+
+
+
     Route::post('/post', [PostController::class, 'store']); 
     Route::get('/viewPost', [PostController::class, 'index']); 
     Route::get('/id_viewPost/{id}', [PostController::class, 'show']); 

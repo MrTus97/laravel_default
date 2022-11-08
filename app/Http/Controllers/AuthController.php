@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Comment;
+
 use App\Models\Address;
 use App\Models\Post;
 
@@ -108,7 +110,7 @@ class AuthController extends Controller
      */
     public function userProfile() {     
 
-            // / ->join('comments', 'users.id', '=', 'comments.user_id')->get();
+           
         $data = User::find(Auth::user()->id);
         $data ->address;
         $data ->post;
@@ -119,6 +121,28 @@ class AuthController extends Controller
 
         ]);
         
+    }
+
+    public function getusercm() {             
+        $data = User::
+        leftJoin('comments', function($join) {
+            $join->on('comments', 'users.id', '=', 'comments.user_id');
+        })->first();
+        return response([
+            'data'=> $data,
+
+        ]);
+    }
+
+    //lấy comment theo user_id nhập vào params
+    public function getuserid(Request $request) {
+
+        $id = $request->user_id;
+        $data = Comment::where("user_id",$id)->get();
+        return response([
+            'data'=> $data,
+
+        ]);
     }
 
     

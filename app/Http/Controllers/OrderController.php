@@ -18,12 +18,12 @@ class OrderController extends Controller
 {
     
 
-    public OrderRepositoryInterface $orderRepository;
+    // public OrderRepositoryInterface $orderRepository;
 
-    public function __construct(OrderRepositoryInterface $orderRepository) 
-    {
-        $this->orderRepository = $orderRepository;
-    }
+    // public function __construct(OrderRepositoryInterface $orderRepository) 
+    // {
+    //     $this->orderRepository = $orderRepository;
+    // }
     public function index()
     {
         // $index = Order::get();
