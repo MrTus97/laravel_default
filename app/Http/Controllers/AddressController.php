@@ -2,30 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-
-use App\Repositories\CommentRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Repositories\CommentInterface;
-use Illuminate\Support\Facades\DB;
+use App\Address\Repositories\AddressRepository;
+use App\Repositories\Address\AddressInterface;
 
-
-class CommentController extends Controller
+class AddressController extends Controller
 {
-    private $CommentRepository;
+    
+    private $AddressRepository;
 
-    public function __construct(CommentInterface $CommentRepository) 
+    public function __construct(AddressInterface $AddressRepository) 
     {
-        $this->CommentRepository = $CommentRepository;
+        $this->AddressRepository = $AddressRepository;
     }
     public function index()
     {
-
-     
-        return response()->json([
-            'data' => $this->CommentRepository->getAllComments(),
-        ]);
+        return response()->json(['data'=> $this->AddressRepository->getAllAddresses()]);
     }
 
     /**
@@ -37,11 +29,6 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         
-
-        
-        return response()->json([         
-            'data'=> $this->CommentRepository->createComment($request),
-        ]);
     }
 
     /**
@@ -52,12 +39,9 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-
-        return response([
-            'data'=> $this->CommentRepository->getOrderById($id),
-
+        return response()->json([
+            'data'=> $this->AddressRepository->getAddressById($id)
         ]);
-    
     }
 
     /**
@@ -69,7 +53,9 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return response()->json([
+            'data'=> $this ->AddressRepository->updateAddress($request, $id)
+        ]);
     }
 
     /**

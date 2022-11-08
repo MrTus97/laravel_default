@@ -5,8 +5,12 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Comment;
+
 use App\Models\Address;
 use App\Models\Post;
+use App\Repositories\UserRepository;
+use App\Repositories\UserInterface;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;  
@@ -16,43 +20,20 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    private UserInterface $UserRepository;
 
+    public function __construct(UserInterface $UserRepository) 
+    {
+        $this->UserRepository = $UserRepository;
+    }
     
 
     public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            // 'number'=>'required|integer',
-            'password' => 'required|string|min:6',
+        return response([
+            'data' => $this->UserRepository->login($request),
+
         ]);
         
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'kh tìm thấy tài khoản']);
-        }
-
-        return $this->createNewToken($token);
-        
-    }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token){
-        
-        return response()->json([
-            'message' => 'login thành công',
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'user' => auth()->user()     
-            
-        ]);
     }
 
     public function logout() {
@@ -68,36 +49,11 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|string|',
-            'password' => 'required|string|min:6',
-        ]);
-
-        //To JSON – Để convert một model sang JSON
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)],
-            
-        ));
-
-        $user -> address() ->create([
-            'street'=> $request -> street, 
-            'state'=> $request -> state, 
-            'city'=> $request -> city, 
-
-        ]);
-       
-
-        $user->address;
         return response()->json([
             'message' => 'đk thành công',
-            'user' => $user,
-        ], 201);
+            'user' => $this -> UserRepository -> Register($request),
+        ]);
+
     }
 
 
@@ -107,19 +63,17 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile() {     
-
-            // / ->join('comments', 'users.id', '=', 'comments.user_id')->get();
-        $data = User::find(Auth::user()->id);
-        $data ->address;
-        $data ->post;
-        $data ->order;
-        $data ->comments;
         return response([
-            'data'=> $data,
+            'data'=> $this-> UserRepository -> viewUser(),
 
         ]);
         
     }
 
-    
+    public function getuserid(Request $request)
+    {
+        return response()->json([
+            'Comment user_id' => $this->UserRepository->userId($request),
+        ]);
+    }
 }

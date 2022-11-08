@@ -17,9 +17,7 @@ class User extends Authenticatable implements JWTSubject
     public function address()
     {
         return $this->hasOne(Address::class);
-    }
-
-    
+    }  
     public function menu()
     {
         return $this->hasMany(Menu::class);

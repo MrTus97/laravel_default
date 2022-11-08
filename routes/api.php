@@ -7,7 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\AddressController;
 
 
 use App\Http\Controllers\AuthController;
@@ -34,6 +34,13 @@ use App\Http\Middleware\VerifyJWTToken;
 Route::middleware(VerifyJWTToken::class)->prefix('demo')->group(function(){
     Route::get('/user-profile', [AuthController::class, 'userProfile']); 
     Route::post('/logout', [AuthController::class, 'logout']); 
+    Route::get('/user_id', [AuthController::class, 'getuserid']);
+
+
+    Route::get('/viewAddress', [AddressController::class, 'index']); 
+    Route::get('/id_viewAddress/{id}', [AddressController::class, 'show']); 
+    Route::put('/updateAddress/{id}', [AddressController::class, 'update']);  
+
 
     Route::post('/post', [PostController::class, 'store']); 
     Route::get('/viewPost', [PostController::class, 'index']); 
@@ -80,5 +87,8 @@ Route::middleware(VerifyJWTToken::class)->prefix('demo')->group(function(){
 Route::prefix('user')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
+
+    
+
 });
 

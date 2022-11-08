@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
+use App\Repositories\Order\OrderRepositoryInterface;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
-use App\Interfaces\OrderRepositoryInterface;
-use App\Repositories\OrderRepository;
+
+use App\Repositories\Order\OrderRepository;
 
 use Illuminate\Http\JsonResponse;
 use App\Models\Menu;
@@ -18,7 +19,7 @@ class OrderController extends Controller
 {
     
 
-    public OrderRepositoryInterface $orderRepository;
+    private $orderRepository;
 
     public function __construct(OrderRepositoryInterface $orderRepository) 
     {
@@ -26,24 +27,17 @@ class OrderController extends Controller
     }
     public function index()
     {
-        // $index = Order::get();
-        // return response()->json($index);
+
          
         return response()->json([
             'data' => $this->orderRepository->getAllOrders()
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         return response([
-            'data' => $this->orderRepository->createOrder
+            'data' => $this->orderRepository->createOrder($request),
         ]);
     }
 
@@ -53,12 +47,12 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // public function show($id)
-    // {
-    //     return response([
-    //         'data' => $this->orderRepository->getOrderById($id)
-    //     ]);
-    // }
+    public function show($id)
+    {
+        return response([
+            'data' => $this->orderRepository->getOrderById($id)
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.

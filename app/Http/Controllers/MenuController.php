@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\MenuRepository;
+use App\Repositories\MenuInterface;
 
 use App\Http\Controllers\AuthController;
 use App\Models\User;
@@ -13,16 +14,14 @@ use DB;
 class MenuController extends Controller
 {
 
-    public MenuRepository $MenuRepository;
+    public MenuInterface $MenuRepository;
 
-    public function __construct(MenuRepository $MenuRepository, Menu $menu) 
+    public function __construct(MenuInterface $MenuRepository) 
     {
-        $this->menu = $menu;
+
         $this->MenuRepository = $MenuRepository;
     }
-    // public function __construct(Menu $menu){
-    //     $this->menu = $menu;
-    // }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,10 +29,10 @@ class MenuController extends Controller
      */
     public function index()
     {
-
-        $index = Menu::get();
-        return response()->json($index);
-
+ 
+        return response()->json([
+            'data' => $this-> MenuRepository->getAllMenus()
+        ]);
         
     }
 
@@ -45,12 +44,8 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-       
-        $data = Menu::create([
-            'name'=> $request -> name, 
-            'user_id'=> Auth::user()-> id,
-        ]);
-        return response()->json($data);
+
+        return response()->json(['data' => $this-> MenuRepository->createMenu($request)]);
     }
 
     /**
@@ -61,11 +56,8 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        $idMenu = $this -> menu->find($id);
-        $idMenu  -> user;
-        return response([
-            'data' => $idMenu
-        ]);
+
+        return response()->json(['data' => $this-> MenuRepository->getMenuById($id)]);
     }
 
     /**
@@ -78,18 +70,8 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
 
-       
-        $menuUpdate = $this -> menu->find($id);
-        $menuUpdate ->update ([
-            'name'=>$request->name,
-            'user_id' => Auth::user()->id 
-            
-        ]);
-       
-        return response([
-            'data' => $menuUpdate,
-        ]);
-
+        return response()->json(['data' => $this-> MenuRepository->updateMenu($request, $id)]);
+        
     }
 
     /**
@@ -100,11 +82,9 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        $menuDelete = $this -> menu->find($id);
-        $menuDelete->delete();
-        return response([
-            'message' => 'đã xóa'
-        ]);
+        return response()->json([
+            'message' => 'đã xóa menu',
+            'data'=> $this-> MenuRepository->deleteMenu($id)]);
 
     }
 }

@@ -12,14 +12,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;  
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\PostRepository;
+use App\Repositories\PostInterface;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
+    private $PostRepository;
+
+    public function __construct(PostInterface $PostRepository) 
+    {
+        $this->PostRepository = $PostRepository;
+    }
     public function index()
     {
 
@@ -31,16 +35,10 @@ class PostController extends Controller
         // ]);
 
         // $index = Post::where('title','like', '%nguoi%')->get();
-    
-
-        // $posts = DB::table('posts')
-        //     ->join('contacts', 'users.id', '=', 'contacts.user_id')
-        //     ->get();    
         // count : chỉ số lượng có thể thêm các thuộc tính
 
-        $posts = Post::get();
         
-        return response()->json($posts);
+        return response()->json(['data'=> $this->PostRepository->getAllPosts()]);
        
         
 
@@ -54,19 +52,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // $post = User::find(Auth::user()->id)->posts;
-        // dd(Auth::user()-> id);
-        $post = Post::create([
-            'title'=> $request -> title, 
-            'content'=> $request -> content,
-            'user_id'=> Auth::user()-> id
-        ]);
+
 
         
-        return response()->json(
-            // $post,           
-            $post
-        );
+        return response()->json([
+            'mess'=>'dữ liệu được thêm vào',
+            'post'=> $this ->PostRepository->createPost($request),
+        ]);
     }
 
     /**
@@ -77,11 +69,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        // $data = User::find(Auth::user()->id);    
-        $data = Post::find($id);
-        $data->user;
+
+
         return response([
-            'data'=> $data,
+            'data'=> $this->PostRepository->getPostById($id),
 
         ]);
     

@@ -8,14 +8,24 @@ use App\Http\Controllers\AuthController;
 use App\Models\User;
 use App\Models\Menu;
 use App\Models\Product;
+use App\Repositories\ProductRepository;
+use App\Repositories\ProductInterface;
+
 use Illuminate\Database\Eloquent\Builder;
 use DB;
 
 
 class ProductController extends Controller
 {
-    public function __construct(Product $product){
-        $this->product = $product;
+    // public function __construct(Product $product){
+    //     $this->product = $product;
+    // }
+
+    public ProductInterface $ProductRepository;
+
+    public function __construct(ProductInterface $ProductRepository) 
+    {
+        $this->ProductRepository = $ProductRepository;
     }
     /**
      * Display a listing of the resource.
@@ -25,20 +35,13 @@ class ProductController extends Controller
     public function index()
     {
     
-        $index = Product::whereHas('comments', function (Builder $query) {
-            $query->where('content', 'like', '%cay%');
-        })->get();
-        // $index = Product::get();
-        return response()->json($index);
+        // $index = Product::whereHas('comments', function (Builder $query) {
+        //     $query->where('content', 'like', '%cay%');
+        // })->get();
+        return response()->json([
+            'data' => $this-> ProductRepository->getAllProducts()
+        ]);
 
-        
-        // $data = Product::find(2);
-        // $data ->orders;
-        // // $data ->post;
-        // return response([
-        //     'data'=> $data,
-
-        // ]);
         
     }
 
@@ -50,15 +53,10 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Product::create([
-            'name'=> $request -> name, 
-            'content'=> $request -> content, 
-            'user_id'=> Auth::user()-> id,
-            'menu_id'=> $request ->menu_id,
-
-        ]);
       
-        return response()->json($data);
+        return response()->json([
+            'data' => $this ->ProductRepository->createProduct($request),
+        ]);
     }
 
     /**
@@ -70,19 +68,10 @@ class ProductController extends Controller
     public function show($id)
     {
         
-        
-        $data = Product::find($id);
-        $data ->orders;
-        $data ->comments;
-        $data ->user;
+        return response()->json(['data' => $this-> ProductRepository->getProductById($id)]);
 
 
-        // $data ->post;
-        return response([
-            'data'=> $data,
-
-        ]);
-    }
+   }
 
     /**
      * Update the specified resource in storage.
@@ -94,16 +83,8 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         
-        $productUpdate = $this -> product->find($id);
-        $productUpdate ->update ([
-            'name'=>$request->name,
-            'content'=>$request->content,
-            'menu_id'=> $request->menu_id,
-            'user_id' => Auth::user()->id             
-        ]);   
-        return response([
-            'data' => $productUpdate,
-        ]);
+        return response()->json(['data' => $this-> ProductRepository->updateProduct($request,$id)]);
+
 
 
     }
@@ -116,9 +97,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $productDelete = $this -> product->find($id);
-        $productDelete->delete();
+        
         return response([
+            'data'=> $this ->ProductRepository ->deleteProduct($id),
             'message' => 'đã xóa product'
         ]);
 
