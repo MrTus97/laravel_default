@@ -26,7 +26,7 @@ class NewReposiory implements NewReposityInterface
     public function getAll()
     {
 
-        return News::get();
+        return News::with('user','menu','getComment','tag')->get();
         
     }
     public function getNewId($newId)

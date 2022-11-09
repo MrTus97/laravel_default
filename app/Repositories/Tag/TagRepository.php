@@ -13,7 +13,7 @@ class TagRepository implements TagReposityInterface
     public function getAll()
     {
         
-        return DB::table('tags')->get();;
+        return tag::with('getNew')->get();;
     }
 
 

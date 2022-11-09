@@ -4,8 +4,6 @@ namespace App\Repositories\Menu;
 //use Your Model
 use App\Repositories\Menu\MenuReposityInterface; 
 use App\Models\Menu;
-use App\Http\Requests\MenuRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -18,7 +16,7 @@ class MenuReposiory implements MenuReposityInterface
    
     public function getAll()
     {
-        return Menu::get();
+        return Menu::with('getUser','getNews')->get();
     }
 
     // show id

@@ -12,7 +12,7 @@ class UserRepository implements UserReposityInterface
 {
     public function getAll()
     {
-        return User::get();
+        return User::with('getInfoUser','getMenu','getNew','getRole')->get();
     }
     public function getDataId($dataId)
     {
