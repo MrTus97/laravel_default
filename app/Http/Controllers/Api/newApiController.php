@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\News;
-use App\Models\Menu;
 use App\Http\Requests\NewRequest;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Repositories\New\NewReposityInterface; 
+use App\Services\News\NewServices;
 
-class newApiController extends Controller
+class NewApiController extends Controller
 {
     
     private $menu;
-    public function __construct(NewReposityInterface $news)
+    public function __construct(NewServices $news)
     {
         $this->news = $news;
     }
@@ -26,7 +21,7 @@ class newApiController extends Controller
      */
     public function index()
     {
-        return $this->news->getAll();
+        return $this->news->index();
     }
 
     /**
@@ -37,7 +32,7 @@ class newApiController extends Controller
      */
     public function store(NewRequest $request)
     {   
-        return $this->news->createNew($request);
+        return $this->news->storeData($request);
     }
 
     /**
@@ -48,7 +43,7 @@ class newApiController extends Controller
      */
     public function show($id)
     {
-        return $this->news->getNewId($id);
+        return $this->news->showId($id);
     }
 
     /**
@@ -60,7 +55,7 @@ class newApiController extends Controller
      */
     public function update(NewRequest $request, $id)
     {
-        return $this->news->updateNew($id,$request);
+        return $this->news->updateData($id,$request);
     }
 
     /**
@@ -72,6 +67,6 @@ class newApiController extends Controller
     public function destroy($id)
     {
         
-            return $this->news->deleteNew($id);
+            return $this->news->deleteData($id);
     }
 }

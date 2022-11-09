@@ -2,12 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\menuApiController;
-use App\Http\Controllers\Api\newApiController;
-use App\Http\Controllers\Api\userApiController;
-use App\Http\Controllers\Api\tagApiController;
-use App\Http\Controllers\Api\commentApiController;
-use App\Http\Controllers\Api\roleApiController;
+use App\Http\Controllers\Api\MenuApiController;
+use App\Http\Controllers\Api\NewApiController;
+use App\Http\Controllers\Api\UserApiController;
+use App\Http\Controllers\Api\TagApiController;
+use App\Http\Controllers\Api\CommentApiController;
+use App\Http\Controllers\Api\RoleApiController;
 
 
 /*
@@ -31,7 +31,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::prefix('laravel')->group(function(){
 
         // menu ------------------------------
-        Route::apiResource('menus', menuApiController::class);
+        Route::apiResource('menus', MenuApiController::class);
         // Route::prefix('menus')->group(function(){
         //     Route::get('index', [menuApiController::class , 'index']);
         //     Route::post('add', [menuApiController::class , 'store']);
@@ -41,7 +41,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         // });
 
         //News ------------------------------
-        Route::apiResource('news', newApiController::class);
+        Route::apiResource('news', NewApiController::class);
 
         // Route::prefix('news')->group(function(){
         //     Route::get('index', [newApiController::class, 'index']);
@@ -52,28 +52,28 @@ Route::group(['middleware' => ['jwt.verify']], function() {
         // });
         // Tag====================================
 
-        Route::apiResource('tags', tagApiController::class);
+        Route::apiResource('tags', TagApiController::class);
 
         //comment ====================================
 
-        Route::apiResource('comments', commentApiController::class);
+        Route::apiResource('comments', CommentApiController::class);
 
         //role ===================================
-        Route::apiResource('roles', roleApiController::class);
+        Route::apiResource('roles', RoleApiController::class);
     });
 
 
 
-    Route::get('info', [userApiController::class, 'index']);
-    Route::put('user/update/{id}', [userApiController::class, 'update']);
+    Route::get('info', [UserApiController::class, 'index']);
+    Route::put('user/update/{id}', [UserApiController::class, 'update']);
 
 
 });
 Route::prefix('users')->group(function(){
-    Route::post('register', [userApiController::class, 'register']);
-    Route::get('login', [userApiController::class, 'login']);
+    Route::post('register', [UserApiController::class, 'register']);
+    Route::get('login', [UserApiController::class, 'login']);
 
-
+    Route::get('getuser', [UserApiController::class, 'getuser']);
 });
 
 

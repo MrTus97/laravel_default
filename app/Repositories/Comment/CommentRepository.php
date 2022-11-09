@@ -10,68 +10,24 @@ class CommentRepository implements CommentReposityInterface
 {
     public function getAll()
     {
-        $data = DB::table('comments')->get();
-        $returnData = [
-            'message' => 'get all data',
-            'data' => $data
-        ];
-        return $returnData;
+        return DB::table('comments')->get();
     }
     public function getDataId($dataId)
     {
-        $dataId = comment::find($dataId);
-        $dataId->getUser;
-        $dataId->getNew;
-        $returnData = [
-            'message' => 'get data follew id',
-            'data' => $dataId
-        ];
-        return $returnData;
+        return comment::find($dataId);
     }
-    public function createData(Request $request)
+    public function createData(array $data)
     {
-        $datacreate = comment::create([
-            'name' => $request->name,
-            'user_id' => Auth::user()->id,
-            'new_id' => $request->new_id
-        ]);
-        if(!$datacreate){
-            return response([
-                'error' => ' Error insert data table role',
-            ]);
-        }
-        $returnData = [
-            'message' => "Insert data to table comment success",
-            'data' => $datacreate
-        ];
-        return $returnData;
+        
+        return comment::create($data);
     }
-    public function updateData($dataId , Request $request)
+    public function updateData(array $data ,$dataId)
     {
-        $showId = comment::find($dataId);
-        $datacreate = $showId->update([
-            'name' => $request->name,
-            'user_id' => Auth::user()->id,
-            'new_id' => $request->new_id
-        ]);
-        if(!$datacreate){
-            return response([
-                'error' => ' Error update data table role',
-            ]);
-        }
-        $returnData = [
-            'message' => "Update data table comment success",
-            'data' => $datacreate
-        ];
-        return $returnData;
+        
+        return comment::where('id',$dataId)->update($data);
     }
     public function deleteData($dataId)
     {
-        $delete = comment::destroy($dataId);
-        $returnData = [
-            'message' => "Delete data table comment success",
-            'data' => $delete
-        ];
-        return $returnData;
+        return comment::destroy($dataId);
     }
 }

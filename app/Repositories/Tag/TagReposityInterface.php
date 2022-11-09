@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Repositories\Tag;
-use Illuminate\Http\Request;
+
 
 Interface  TagReposityInterface {
 
@@ -12,10 +12,10 @@ Interface  TagReposityInterface {
     public function getDataId($dataId);
 
     //create
-    public function createData(Request $request);
+    public function createData(array $data);
 
     // update 
-    public function updateData($dataId , Request $request);
+    public function updateData(array $data , $id);
 
     //delete
     public function deleteData($dataId);

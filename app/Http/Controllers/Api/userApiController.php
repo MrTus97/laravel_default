@@ -3,31 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\User\UserServices;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Repositories\User\UserReposityInterface; 
 
-class userApiController extends Controller
+class UserApiController extends Controller
 {
     private $user;
-    public function __construct(UserReposityInterface $user)
+    public function __construct(UserServices $user)
     {
         $this->user = $user;
     }
 
     public function register(Request $request)
     {     
-        return $this->user->createData($request);
+        return $this->user->storeData($request);
                  
     }
 
     public function login(Request $request)
     {
-        return $this->user->login($request);
+        return $this->user->loginUser($request);
     }
 
     /**
@@ -75,7 +70,7 @@ class userApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->user->updateData($id , $request);    
+        return $this->user->updateData($request ,$id );    
     }
 
     /**
@@ -88,4 +83,27 @@ class userApiController extends Controller
     {
         //
     }
+    // public function getuser(){
+    // //  $data = comment::where('created_at' )->get();
+      
+    // // $data = DB::table('users')->crossJoin('comments')
+    // // ->get();
+    //     $data = DB::table('comments')->groupBy('name');
+    // //   ->join('users', function ($join) {
+    // //       $join->on('users.id', '=', 'comments.user_id')
+    // //         //    ->where('users.id','=','comments.user_id')
+              
+    // //         //    ->limit(1)
+    // //         // ->groupBy('user_id')
+    // //         ;
+    // //   })
+    // //   ->orderBy('comments.created_at', 'desc')
+    // //   ->max('comments.created_at');
+    // // ->distinct()
+    // // ->where('users.id','=','comments.user_id')
+    // //   ->get();
+      
+
+    //     return response($data);
+    // }
 }

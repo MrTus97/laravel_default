@@ -16,86 +16,28 @@ class UserRepository implements UserReposityInterface
     }
     public function getDataId($dataId)
     {
-       
+       return User::find($dataId);
 
     }
-    public function createData(Request $request)
+    public function createData(array $data)
     {
-        $data = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
-        $data->getInfoUser()->create([
-            'avatar' => $request->avatar,
-            'phone' => $request->phone
-        ]);
-        $data->getInfoUser;
-        $returnData = ([
-            'message' => 'Đăng Ký Thành Công',
-            'User' => $data
-        ]);
-        return $returnData;
+
+        return User::create($data);
         
     }
-    public function updateData($dataId , Request $request)
+    public function updateData(array $data,$dataId)
     {
-            $getUser = User::find($dataId);
-
-            $data = $getUser->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'permission' => $request->permission
-        ]);
-
-        if(($request->permission) == 0){
-            $getUser->setRole()->sync([1,2,3,4]);
-        }else if(($request->permission) == 1){
-            $getUser->setRole()->sync([1]);
-        }
-        $getUser->getInfoUser;
-
-        $returnData = [
-            'message' => 'Update Thành Công',
-            'data' => $getUser
-        ];
-        return $returnData;
+           
+        return User::where('id',$dataId)->update($data);
     
     }
-    
-    public function login(Request $request)
+    public function getEmail($email)
     {
-        $email = $request->email;
-        $password = $request->password;
-
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-
-            $users = User::where('email', $email)->first();
-            $token = JWTAuth::fromUser($users);
-            $users->getInfoUser;
-            $returnData = ([
-                'message' => "Login success",
-                'Token' => $token,
-                'User' => $users
-            ]);
-            return $returnData;
-        }else{
-            return response([
-                'error' => 'Đăng nhập không thành công'
-            ]);
-        }
+        return User::where('email', $email)->first();
     }
+    
     public function getUser()
     {
-        $data = User::find(Auth::user()->id);
-        $data->getInfoUser;
-        $data->getRole;
-        $data->getMenu;
-        $data->getNew;
-        $returnData = [
-            'user' => $data,
-        ];
-        return $returnData;
+        return User::find(Auth::user()->id);
     }
 }

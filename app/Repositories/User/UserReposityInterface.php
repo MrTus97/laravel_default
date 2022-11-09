@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repositories\User;
-use Illuminate\Http\Request;
 
 Interface  UserReposityInterface {
 
@@ -12,15 +11,17 @@ Interface  UserReposityInterface {
     public function getDataId($dataId);
 
     //create
-    public function createData(Request $request);
+    public function createData(array $data);
 
     // update 
-    public function updateData($dataId , Request $request);
+    public function updateData( array $data,$dataId);
 
     //delete
     // public function deleteData($dataId);
 
-    public function login(Request $request);
+
 
     public function getUser();
+
+    public function getEmail($email);
 }

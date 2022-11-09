@@ -11,69 +11,32 @@ class RoleRepository implements RoleReposityInterface
 
     public function getAll()
     {
-        $data = DB::table('roles')->get();
-        $returnData = [
-            'message' => 'get all data table role',
-            'data' => $data
-        ];
-        return $returnData;
+       
+        return DB::table('roles')->get();
     }
 
 
     public function getDataId($dataId)
     {
-        $dataId =  Role::find($dataId);
-      
-        $returnData = [
-            'message' => 'get data follew id',
-            'data' => $dataId
-        ];
-        return $returnData;
+        return Role::find($dataId);
     }
 
 
-    public function createData(Request $request)
+    public function createData(array $data)
     {
-        $datacreate = Role::create([
-            'name' => $request->name
-        ]);
-        if(!$datacreate){
-            return response([
-                'error' => ' Error insert data table role',
-            ]);
-        }
-        $returnData = [
-            'message' => 'Insert data table role success',
-            'data' => $datacreate
-        ];
-        return $returnData;
+        
+        return Role::create($data);
     }
 
 
-    public function updateData($dataId , Request $request)
+    public function updateData( array $data ,$dataId )
     {
-        $data = Role::where('id',$dataId)->first();
-         $dataUpdate = $data->update([
-            'name' => $request->name
-        ]);
-        if(!$dataUpdate){
-            return response([
-                'error' => ' Error Update data table role',
-
-            ]);
-        }
-        $returnData = [
-            'message' => 'Update data table role success',
-        ];
-        return $returnData;
+        return Role::where('id',$dataId)->update($data);
        
     }
     public function deleteData($dataId)
     {
-        Role::destroy($dataId);
-        $returnData = [
-            'message' => 'Delete success'
-        ];
-        return $returnData;
+
+        return Role::destroy($dataId);
     }
 }

@@ -3,7 +3,8 @@ namespace App\Repositories\Tag;
 use App\Models\tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\Tag\TagReposityInterface; 
+use App\Repositories\Tag\TagReposityInterface;
+use Illuminate\Support\Arr;
 
 class TagRepository implements TagReposityInterface
 {
@@ -11,70 +12,30 @@ class TagRepository implements TagReposityInterface
 
     public function getAll()
     {
-        $data = DB::table('tags')->get();
-        $returnData = [
-            'message' => 'get all data table tags',
-            'data' => $data
-        ];
-        return $returnData;
+        
+        return DB::table('tags')->get();;
     }
 
 
     public function getDataId($dataId)
     {
-        $dataId = tag::find($dataId);
-        $dataId->getNew;
-        
-        $returnData = [
-            'message' => 'get data follew id',
-            'data' => $dataId
-        ];
-        return $returnData;
+        return tag::find($dataId);
     }
 
 
-    public function createData(Request $request)
+    public function createData(array $data)
     {
-        $datacreate = tag::create([
-            'name' => $request->name
-        ]);
-        if(!$datacreate){
-            return response([
-                'error' => ' Error insert data table role',
-            ]);
-        }
-        $returnData = [
-            'message' => 'Insert data table role success',
-            'data' => $datacreate
-        ];
-        return $returnData;
+        return tag::create($data);
     }
 
 
-    public function updateData($dataId , Request $request)
+    public function updateData(array $data ,$id)
     {
-        $data = tag::where('id',$dataId)->first();
-         $dataUpdate = $data->update([
-            'name' => $request->name
-        ]);
-        if(!$dataUpdate){
-            return response([
-                'error' => ' Error Update data table role',
-
-            ]);
-        }
-        $returnData = [
-            'message' => 'Update data table role success',
-        ];
-        return $returnData;
+        return tag::where('id',$id)->update($data);
        
     }
     public function deleteData($dataId)
     {
-        tag::destroy($dataId);
-        $returnData = [
-            'message' => 'Delete success'
-        ];
-        return $returnData;
+        return tag::destroy($dataId);
     }
 }

@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\models\tag;
-use App\Repositories\Tag\TagReposityInterface; 
+use App\Services\Tag\TagServices;
 
-class tagApiController extends Controller
+class TagApiController extends Controller
 {
 
     private $tag;
-    public function __construct(TagReposityInterface $tag)
+    public function __construct(TagServices $tag)
     {
         $this->tag = $tag;
     }
@@ -22,7 +21,7 @@ class tagApiController extends Controller
      */
     public function index()
     {
-        return $this->tag->getAll();
+        return $this->tag->index();
     }
 
     /**
@@ -33,7 +32,7 @@ class tagApiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->tag->storeData($request);
     }
 
     /**
@@ -44,7 +43,7 @@ class tagApiController extends Controller
      */
     public function show($id)
     {
-        return $this->tag->getDataId($id);
+        return $this->tag->showId($id);
     }
 
     /**
@@ -56,7 +55,7 @@ class tagApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->tag->updateData($request , $id);
     }
 
     /**
@@ -67,6 +66,6 @@ class tagApiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->tag->deleteData($id);
     }
 }

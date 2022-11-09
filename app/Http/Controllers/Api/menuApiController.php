@@ -7,18 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\User;
 use App\Http\Requests\MenuRequest;
+use App\Services\Menu\MenuServices;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\Menu\MenuReposityInterface;
 
-
-
-
-class menuApiController extends Controller
+class MenuApiController extends Controller
 {
-    private $MenuReposity;
-    public function __construct(MenuReposityInterface $MenuReposity){
-        $this->MenuReposity = $MenuReposity;
+    private $menuServices;
+    public function __construct(MenuServices $menuServices){
+        $this->menuServices = $menuServices;
     }
     /**
      * Display a listing of the resource.
@@ -28,7 +25,7 @@ class menuApiController extends Controller
     public function index()
     {
 
-       return $this->MenuReposity->getAll();
+       return $this->menuServices->index();
        
     }
 
@@ -40,7 +37,8 @@ class menuApiController extends Controller
      */
     public function store(MenuRequest $request)
     {
-        return $this->MenuReposity->createMenu($request);
+        
+        return $this->menuServices->storeData($request);
     }
 
     /**
@@ -51,7 +49,7 @@ class menuApiController extends Controller
      */
     public function show($id)
     {
-        return $this->MenuReposity->getMenuId($id);
+        return $this->menuServices->showId($id);
     }
 
     /**
@@ -63,7 +61,7 @@ class menuApiController extends Controller
      */
     public function update(MenuRequest $request, $id)
     {
-        return $this->MenuReposity->updateMenu($id,$request);
+        return $this->menuServices->updateData($request,$id);
     }
 
     /**
@@ -74,6 +72,6 @@ class menuApiController extends Controller
      */
     public function destroy($id)
     {
-        return $this->MenuReposity->deleteMenu($id);
+        return $this->menuServices->deleteData($id);
     }
 }

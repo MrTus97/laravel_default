@@ -3,17 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\Role\RoleServices;
 use Illuminate\Http\Request;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use App\Repositories\Role\RoleReposityInterface; 
 
-
-class roleApiController extends Controller
+class RoleApiController extends Controller
 {
     private $role;
-    public function __construct(RoleReposityInterface $role)
+    public function __construct(RoleServices $role)
     {
         $this->role = $role;
     }
@@ -24,7 +20,7 @@ class roleApiController extends Controller
      */
     public function index()
     {
-        return $this->role->getAll();
+        return $this->role->index();
     }
 
     /**
@@ -36,7 +32,7 @@ class roleApiController extends Controller
     public function store(Request $request)
     {
 
-        return $this->role->createData($request);
+        return $this->role->storeData($request);
     }
 
     /**
@@ -47,7 +43,7 @@ class roleApiController extends Controller
      */
     public function show($id)
     { 
-        return $this->role->getDataId($id);
+        return $this->role->showId($id);
     }
 
     /**
@@ -59,7 +55,7 @@ class roleApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->role->updateData($id,$request);
+        return $this->role->updateData($request,$id);
     }
 
     /**

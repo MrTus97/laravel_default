@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\News;
-use App\Models\comment;
+use App\Services\Comment\CommentServices;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\Comment\CommentReposityInterface;
 
-class commentApiController extends Controller
+class CommentApiController extends Controller
 {
     private $Comment;
-    public function __construct(CommentReposityInterface $Comment)
+    public function __construct(CommentServices $Comment)
     {
         $this->Comment = $Comment;
     }
@@ -23,7 +21,7 @@ class commentApiController extends Controller
      */
     public function index()
     {
-        return $this->Comment->getAll();
+        return $this->Comment->index();
     }
 
     /**
@@ -34,7 +32,7 @@ class commentApiController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->Comment->createData($request);
+        return $this->Comment->storeData($request);
     }
 
     /**
@@ -45,7 +43,7 @@ class commentApiController extends Controller
      */
     public function show($id)
     {
-        return $this->Comment->getDataId($id);
+        return $this->Comment->showId($id);
     }
 
     /**
@@ -57,7 +55,7 @@ class commentApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->Comment->updateData($id,$request);
+        return $this->Comment->updateData($request,$id);
     }
 
     /**

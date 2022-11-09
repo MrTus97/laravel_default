@@ -12,10 +12,10 @@ Interface  MenuReposityInterface {
     public function getMenuId($menuId);
 
     //create
-    public function createMenu(MenuRequest $request);
+    public function createMenu(array $menu);
 
     // update 
-    public function updateMenu($menuId , MenuRequest $request);
+    public function updateMenu(array $menu,$id);
 
     //delete
     public function deleteMenu($menuId);

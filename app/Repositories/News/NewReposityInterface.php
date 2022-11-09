@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Repositories\New;
-use App\Http\Requests\NewRequest;
+namespace App\Repositories\News;
 
 Interface  NewReposityInterface {
 
@@ -12,10 +11,10 @@ Interface  NewReposityInterface {
     public function getNewId($newId);
 
     //create
-    public function createNew(NewRequest $request);
+    public function createNew(array $data);
 
     // update 
-    public function updateNew($newId, NewRequest $request);
+    public function updateNew(array $data,$newId);
 
     //delete
     public function deleteNew($newId);

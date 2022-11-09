@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\New\NewReposiory;
-use App\Repositories\New\NewReposityInterface; 
+use App\Repositories\News\NewReposiory;
+use App\Repositories\News\NewReposityInterface; 
 
 use App\Repositories\Menu\MenuReposiory;
 use App\Repositories\Menu\MenuReposityInterface;
