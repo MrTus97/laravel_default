@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\comment;
+use App\Models\User;
 use App\Services\User\UserServices;
 use Illuminate\Http\Request;
 
@@ -83,27 +85,16 @@ class UserApiController extends Controller
     {
         //
     }
-    // public function getuser(){
-    // //  $data = comment::where('created_at' )->get();
-      
-    // // $data = DB::table('users')->crossJoin('comments')
-    // // ->get();
-    //     $data = DB::table('comments')->groupBy('name');
-    // //   ->join('users', function ($join) {
-    // //       $join->on('users.id', '=', 'comments.user_id')
-    // //         //    ->where('users.id','=','comments.user_id')
-              
-    // //         //    ->limit(1)
-    // //         // ->groupBy('user_id')
-    // //         ;
-    // //   })
-    // //   ->orderBy('comments.created_at', 'desc')
-    // //   ->max('comments.created_at');
-    // // ->distinct()
-    // // ->where('users.id','=','comments.user_id')
-    // //   ->get();
-      
+    public function getuser(){
+    
+        $users = User::with(['getComment' => function ($query) {
+            // $query->where('id', 'like', '%6%');
+            $query->orderBy('id','desc')
+                    ->limit(1);
+         
+        }])->get();
+     
 
-    //     return response($data);
-    // }
+        return response($users);
+    }
 }
