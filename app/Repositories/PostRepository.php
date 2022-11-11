@@ -28,19 +28,14 @@ class PostRepository implements PostInterface
 
     public function getPostById($id) 
     {
-        $data = Post::find($id);
-        $data->user;
-        return $data;
+        return Post::find($id);
+        
     }
 
-    public function createPost(Request $request) 
+    public function createPost(array $request) 
     {
-        $post = Post::create([
-            'title'=> $request -> title, 
-            'content'=> $request -> content,
-            'user_id'=> Auth::user()-> id
-        ]);
-        return $post;
+       return Post::create($request);
+
 
     }
 }

@@ -14,16 +14,23 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\PostRepository;
 use App\Repositories\PostInterface;
+use App\Services\PostService;
 
 class PostController extends Controller
 {
    
-    private $PostRepository;
+    public $postService;
 
-    public function __construct(PostInterface $PostRepository) 
+    public function __construct(PostService $postService) 
     {
-        $this->PostRepository = $PostRepository;
+        $this->postService = $postService;
     }
+    // private $PostRepository;
+
+    // public function __construct(PostInterface $PostRepository) 
+    // {
+    //     $this->PostRepository = $PostRepository;
+    // }
     public function index()
     {
 
@@ -38,7 +45,7 @@ class PostController extends Controller
         // count : chỉ số lượng có thể thêm các thuộc tính
 
         
-        return response()->json(['data'=> $this->PostRepository->getAllPosts()]);
+        return response()->json(['data'=> $this->postService->index()]);
        
         
 
@@ -57,7 +64,7 @@ class PostController extends Controller
         
         return response()->json([
             'mess'=>'dữ liệu được thêm vào',
-            'post'=> $this ->PostRepository->createPost($request),
+            'post'=> $this ->postService->createPost($request),
         ]);
     }
 
@@ -72,8 +79,7 @@ class PostController extends Controller
 
 
         return response([
-            'data'=> $this->PostRepository->getPostById($id),
-
+            'data'=> $this->postService->getPostById($id),
         ]);
     
     }

@@ -20,19 +20,26 @@ class UserRepository implements UserInterface
      * @return string
      *  Return the model
      */
+    private $user;
+
+    public function __construct(User $user) 
+    {
+        $this->user = $user;
+    }
     public function model()
     {
         //return YourModel::class;
     }
     // public function viewUser() 
     // {
+    //     return User::find(Auth::user()->id);
        
-    //     $data = User::find(Auth::user()->id);
-    //     $data ->address;
-    //     $data ->post;
-    //     $data ->order;
-    //     $data ->comments;
-    //     return $data;
+    //     // return User::get();
+    //     // $data ->address;
+    //     // $data ->post;
+    //     // $data ->order;
+    //     // $data ->comments;
+    //     // return $data;
 
     // }
 
@@ -40,7 +47,10 @@ class UserRepository implements UserInterface
     //LẤY COMMENT CUỐI CÙNG CỦA TẤT CẢ USER
     public function viewUser() 
     {
-        $data = User::join('comments', 'users.id', '=', 'comments.user_id')->get();
+        // $data = $this->user->comments()->all();
+        $data = User::join('comments', 'users.id', '=', 'comments.user_id')
+        ->orderBy('comments.id','desc')
+        ->first();
         return $data;
 
 
@@ -61,58 +71,62 @@ class UserRepository implements UserInterface
     
     public function Register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|string|',
-            'password' => 'required|string|min:6',
-        ]);
 
-        //To JSON – Để convert một model sang JSON
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
-        }
+        // return User::create($request);
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string',
+        //     'email' => 'required|string|',
+        //     'password' => 'required|string|min:6',
+        // ]);
 
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)],
+        // //To JSON – Để convert một model sang JSON
+        // if($validator->fails()){
+        //     return response()->json($validator->errors()->toJson(), 400);
+        // }
+
+        // $user = User::create(array_merge(
+        //     $validator->validated(),
+        //     ['password' => bcrypt($request->password)],
             
-        ));
+        // ));
 
-        $user -> address() ->create([
-            'street'=> $request -> street, 
-            'state'=> $request -> state, 
-            'city'=> $request -> city, 
+        // $user -> address() ->create([
+        //     'street'=> $request -> street, 
+        //     'state'=> $request -> state, 
+        //     'city'=> $request -> city, 
 
-        ]);
-        $user->address;
+        // ]);
+        // $user->address;
 
-        return $user;
+        // return $user;
     }
 
     public function login(Request $request) 
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            // 'number'=>'required|integer',
-            'password' => 'required|string|min:6',
-        ]);
-        
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
 
-        if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'kh tìm thấy tài khoản']);
-        }
-        return $this->createNewToken($token);
+        // return User::create($request);
+        // $validator = Validator::make($request->all(), [
+        //     'email' => 'required|email',
+        //     // 'number'=>'required|integer',
+        //     'password' => 'required|string|min:6',
+        // ]);
+        
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors(), 400);
+        // }
+
+        // if (!$token = auth()->attempt($validator->validated())) {
+        //     return response()->json(['error' => 'kh tìm thấy tài khoản']);
+        // }
+        // return $this->createNewToken($token);
     }
-    public function createNewToken($token){
-        return response()->json([
-            'message' => 'login thành công',
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'user' => auth()->user()                 
-        ]);
-    }
+    // public function createNewToken($token){
+    //     return response()->json([
+    //         'message' => 'login thành công',
+    //         'access_token' => $token,
+    //         'token_type' => 'bearer',
+    //         'user' => auth()->user()                 
+    //     ]);
+    // }
 
 }

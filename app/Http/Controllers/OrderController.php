@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Product;
 
 use App\Repositories\Order\OrderRepository;
+use App\Services\OrderService;
 
 use Illuminate\Http\JsonResponse;
 use App\Models\Menu;
@@ -19,25 +20,23 @@ class OrderController extends Controller
 {
     
 
-    private $orderRepository;
+    private $orderService;
 
-    public function __construct(OrderRepositoryInterface $orderRepository) 
+    public function __construct(OrderService $orderService) 
     {
-        $this->orderRepository = $orderRepository;
+        $this->orderService = $orderService;
     }
     public function index()
-    {
-
-         
+    { 
         return response()->json([
-            'data' => $this->orderRepository->getAllOrders()
+            'data' => $this->orderService->index()
         ]);
     }
 
     public function store(Request $request)
     {
         return response([
-            'data' => $this->orderRepository->createOrder($request),
+            'data' => $this->orderService->createOrder($request),
         ]);
     }
 
@@ -50,7 +49,7 @@ class OrderController extends Controller
     public function show($id)
     {
         return response([
-            'data' => $this->orderRepository->getOrderById($id)
+            'data' => $this->orderService->getOrderById($id)
         ]);
     }
 

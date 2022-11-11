@@ -6,34 +6,35 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Comment;
-
-use App\Models\Address;
-use App\Models\Post;
 use App\Repositories\UserRepository;
 use App\Repositories\UserInterface;
+use App\Models\Address;
+use App\Models\Post;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;  
 use Illuminate\Support\Facades\Hash;
-
+use App\Services\UserService;
 
 
 class AuthController extends Controller
 {
-    private UserInterface $UserRepository;
 
-    public function __construct(UserInterface $UserRepository) 
-    {
-        $this->UserRepository = $UserRepository;
-    }
     
+
+    private $userService;
+
+    public function __construct(UserService $userService) 
+    {
+        $this->userService = $userService;
+    }
+
 
     public function login(Request $request){
         return response([
-            'data' => $this->UserRepository->login($request),
-
+            'data' => $this->userService->login($request),
         ]);
-        
+
     }
 
     public function logout() {
@@ -41,7 +42,7 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'logout thành công']);
     }
- 
+
 
     /**
      * Register a User.
@@ -51,7 +52,7 @@ class AuthController extends Controller
     public function register(Request $request) {
         return response()->json([
             'message' => 'đk thành công',
-            'user' => $this -> UserRepository -> Register($request),
+            'user' => $this -> userService -> Register($request),
         ]);
 
     }
@@ -64,10 +65,9 @@ class AuthController extends Controller
      */
     public function userProfile() {     
         return response([
-            'data'=> $this-> UserRepository -> viewUser(),
+            'data'=> $this-> userService -> viewUser(),
 
         ]);
-        
     }
 
     public function getuserid(Request $request)
@@ -76,4 +76,14 @@ class AuthController extends Controller
             'Comment user_id' => $this->UserRepository->userId($request),
         ]);
     }
+
+    // chưa hoàn thành !!
+    public function getusercm() {             
+        $data = User::join('comments','users.id','=','comments.user_id')
+        ->get();
+        return $data;
+    }
+
+
+    
 }

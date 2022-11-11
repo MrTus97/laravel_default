@@ -10,7 +10,7 @@ use App\Models\Menu;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductInterface;
-
+use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Builder;
 use DB;
 
@@ -21,11 +21,11 @@ class ProductController extends Controller
     //     $this->product = $product;
     // }
 
-    public ProductInterface $ProductRepository;
+    public $productService;
 
-    public function __construct(ProductInterface $ProductRepository) 
+    public function __construct(ProductService $productService) 
     {
-        $this->ProductRepository = $ProductRepository;
+        $this->productService = $productService;
     }
     /**
      * Display a listing of the resource.
@@ -39,7 +39,7 @@ class ProductController extends Controller
         //     $query->where('content', 'like', '%cay%');
         // })->get();
         return response()->json([
-            'data' => $this-> ProductRepository->getAllProducts()
+            'data' => $this-> productService->index()
         ]);
 
         
@@ -55,7 +55,7 @@ class ProductController extends Controller
     {
       
         return response()->json([
-            'data' => $this ->ProductRepository->createProduct($request),
+            'data' => $this ->productService->createProduct($request),
         ]);
     }
 
@@ -68,10 +68,10 @@ class ProductController extends Controller
     public function show($id)
     {
         
-        return response()->json(['data' => $this-> ProductRepository->getProductById($id)]);
+        return response()->json(['data' => $this-> productService->getProductById($id)]);
 
 
-   }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -83,7 +83,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         
-        return response()->json(['data' => $this-> ProductRepository->updateProduct($request,$id)]);
+        return response()->json(['data' => $this-> productService->updateProduct($request,$id)]);
 
 
 
@@ -99,8 +99,9 @@ class ProductController extends Controller
     {
         
         return response([
-            'data'=> $this ->ProductRepository ->deleteProduct($id),
-            'message' => 'đã xóa product'
+            'message' => 'đã xóa product',
+            'data'=> $this ->productService ->deleteProduct($id),
+           
         ]);
 
     }

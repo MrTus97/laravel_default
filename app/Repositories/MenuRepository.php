@@ -13,14 +13,6 @@ use App\Repositories\MenuInterface;
  */
 class MenuRepository implements MenuInterface
 {
-    /**
-     * @return string
-     *  Return the model
-     */
-    public function model()
-    {
-        //return YourModel::class;
-    }
     public function getAllMenus() 
     {
         return Menu::get();
@@ -29,10 +21,9 @@ class MenuRepository implements MenuInterface
 
     public function getMenuById($id) 
     {
-        $idMenu = Menu::find($id);
-        $idMenu  -> user;
-        return $idMenu;
-
+        // $idMenu = Menu::find($id);
+        // $idMenu  -> user;
+        return Menu::find($id);
     }
 
     public function deleteMenu($id) 
@@ -42,25 +33,27 @@ class MenuRepository implements MenuInterface
         return $menuDelete;
     }
 
-    public function createMenu(Request $request) 
+    public function createMenu(array $request ) 
     {
-        $data = Menu::create([
-            'name'=> $request -> name, 
-            'user_id'=> Auth::user()-> id,
-        ]);
-        return $data;
+
+        return Menu::create($request);
+
     }
 
-    public function updateMenu(Request $request, $id) 
+    public function updateMenu(array $request, $id) 
     {
-        $menuUpdate = Menu::find($id);
-        $menuUpdate ->update ([
-            'name'=>$request->name,
-            'user_id' => Auth::user()->id 
+        // $menuUpdate = Menu::find($id);
+        // $menuUpdate ->update ([
+        //     'name'=>$request->name,
+        //     'user_id' => Auth::user()->id 
             
-        ]);
+        // ]);
 
-        return $menuUpdate;
+        // return $menuUpdate;
+
+        return Menu::find($id)->update([
+            $request
+        ]);
     }
 
 

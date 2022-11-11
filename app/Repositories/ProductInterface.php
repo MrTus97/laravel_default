@@ -7,8 +7,8 @@ interface ProductInterface
 {
     public function getAllProducts();
     public function getProductById($id);
-    public function createProduct(Request $request);
-    public function updateProduct(Request $request,$id);
+    public function createProduct(array $request);
+    public function updateProduct(array $request,$id);
     public function deleteProduct($id);
 
 

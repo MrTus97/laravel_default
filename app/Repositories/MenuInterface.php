@@ -7,8 +7,8 @@ interface MenuInterface
 {
     public function getAllMenus();
     public function getMenuById($id);
-    public function createMenu(Request $request);
-    public function updateMenu(Request $request,$id);
+    public function createMenu(array $request);
+    public function updateMenu(array $request,$id);
     public function deleteMenu($id);
 
 

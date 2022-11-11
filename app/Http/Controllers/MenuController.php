@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\MenuRepository;
 use App\Repositories\MenuInterface;
-
+use App\Services\MenuService;
 use App\Http\Controllers\AuthController;
 use App\Models\User;
 use App\Models\Menu;
@@ -14,38 +14,41 @@ use DB;
 class MenuController extends Controller
 {
 
-    public MenuInterface $MenuRepository;
+    protected $menuService;
 
-    public function __construct(MenuInterface $MenuRepository) 
+    // public MenuInterface $MenuRepository;
+    public function __construct(MenuService $menuService) 
     {
-
-        $this->MenuRepository = $MenuRepository;
+        $this -> menuService = $menuService;
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function index()
     {
- 
-        return response()->json([
-            'data' => $this-> MenuRepository->getAllMenus()
-        ]);
+
+        return $this->menuService->index();
         
     }
+    // public function __construct(MenuInterface $MenuRepository) 
+    // {
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //     $this->MenuRepository = $MenuRepository;
+    // }
+
+ 
+    // public function index()
+    // {
+ 
+    //     return response()->json([
+    //         'data' => $this-> MenuRepository->getAllMenus()
+    //     ]);
+        
+    // }
+
+
     public function store(Request $request)
     {
 
-        return response()->json(['data' => $this-> MenuRepository->createMenu($request)]);
+        return response()->json(['data' => $this-> menuService->createMenu($request)]);
     }
 
     /**
@@ -57,7 +60,7 @@ class MenuController extends Controller
     public function show($id)
     {
 
-        return response()->json(['data' => $this-> MenuRepository->getMenuById($id)]);
+        return response()->json(['data' => $this-> menuService->getMenuById($id)]);
     }
 
     /**
@@ -70,7 +73,7 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
 
-        return response()->json(['data' => $this-> MenuRepository->updateMenu($request, $id)]);
+        return response()->json([ 'data' => $this-> menuService->updateMenu($request, $id)]);
         
     }
 
@@ -84,7 +87,7 @@ class MenuController extends Controller
     {
         return response()->json([
             'message' => 'đã xóa menu',
-            'data'=> $this-> MenuRepository->deleteMenu($id)]);
+            'data'=> $this-> menuService->deleteMenu($id)]);
 
     }
 }
